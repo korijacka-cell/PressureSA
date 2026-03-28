@@ -1,0 +1,1430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pressure SA – Premium Flower Delivery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Oswald:wght@400;500;600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+:root{
+  --bg:#111;--surface:#1a1a1a;--card:#1e1e1e;--border:#2c2c2c;
+  --green:#2d7a3a;--green2:#3a9e4a;
+  --gold:#c9a840;--gold2:#e8c96a;--golddim:rgba(201,168,64,.12);
+  --white:#f0f0f0;--muted:#888;--faint:#444;--red:#cc2222;--r:6px;
+}
+body{background:var(--bg);color:var(--white);font-family:'Open Sans',sans-serif;min-height:100vh;overflow-x:hidden;}
+.page{display:none;}.page.active{display:block;}
+button{cursor:pointer;}
+a{text-decoration:none;}
+
+/* ── AGE GATE ── */
+#age-gate{position:fixed;inset:0;background:#0a0a0a;z-index:9000;display:flex;align-items:center;justify-content:center;padding:24px;}
+.ag-box{background:var(--card);border:1px solid var(--border);border-top:3px solid var(--gold);border-radius:12px;padding:48px 36px;max-width:420px;width:100%;text-align:center;}
+.ag-logo{font-family:'Dancing Script',cursive;font-weight:700;font-size:2.8rem;color:var(--gold);-webkit-text-stroke:.4px #fff;margin-bottom:4px;}
+.ag-subtitle{font-family:'Oswald',sans-serif;font-size:.7rem;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);margin-bottom:28px;}
+.ag-icon{font-size:2.5rem;margin-bottom:16px;}
+.ag-title{font-family:'Oswald',sans-serif;font-weight:700;font-size:1.4rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;}
+.ag-text{font-size:.82rem;color:var(--muted);line-height:1.65;margin-bottom:28px;}
+.ag-btns{display:flex;gap:12px;justify-content:center;}
+.ag-yes{background:var(--green);color:#fff;border:none;font-family:'Oswald',sans-serif;font-weight:700;font-size:.9rem;letter-spacing:.12em;text-transform:uppercase;padding:13px 32px;border-radius:var(--r);transition:background .2s;}
+.ag-yes:hover{background:var(--green2);}
+.ag-no{background:transparent;color:var(--muted);border:1px solid var(--border);font-family:'Oswald',sans-serif;font-weight:600;font-size:.9rem;letter-spacing:.12em;text-transform:uppercase;padding:12px 28px;border-radius:var(--r);transition:all .2s;}
+.ag-no:hover{border-color:#666;color:var(--white);}
+.ag-denied{display:none;padding:32px;text-align:center;}
+.ag-denied p{color:var(--muted);font-size:.85rem;line-height:1.7;}
+
+/* ── TOPBAR ── */
+.topbar{background:var(--green);padding:7px 16px;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.topbar a{font-family:'Oswald',sans-serif;font-weight:600;font-size:.8rem;letter-spacing:.06em;color:#fff;text-decoration:none;white-space:nowrap;}
+.topbar-right{font-family:'Oswald',sans-serif;font-size:.72rem;color:rgba(255,255,255,.8);white-space:nowrap;letter-spacing:.04em;}
+@media(max-width:480px){.topbar-right{display:none;}.topbar{justify-content:center;}}
+
+/* ── NAVBAR ── */
+.navbar{background:var(--bg);border-bottom:3px solid var(--green);position:sticky;top:0;z-index:500;display:grid;grid-template-columns:48px 1fr 48px;align-items:center;padding:0 12px;height:60px;}
+.hamburger{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;gap:5px;padding:4px;}
+.hamburger span{display:block;width:22px;height:2px;background:var(--white);border-radius:2px;transition:all .25s;}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+.nav-logo{text-align:center;cursor:pointer;text-decoration:none;line-height:1;}
+.nav-logo-text{font-family:'Dancing Script',cursive;font-weight:700;font-size:1.75rem;color:var(--gold);-webkit-text-stroke:.4px #fff;display:block;line-height:1.1;}
+.nav-cart-btn{background:none;border:none;cursor:pointer;display:flex;align-items:center;justify-content:flex-end;gap:4px;color:var(--white);font-size:1.3rem;position:relative;}
+.cart-count-badge{position:absolute;top:-6px;right:-6px;background:var(--gold);color:var(--bg);font-family:'Oswald',sans-serif;font-weight:700;font-size:.6rem;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+@media(min-width:769px){
+  .navbar{grid-template-columns:1fr auto 1fr;padding:0 32px;height:68px;}
+  .hamburger{display:none;}
+  .nav-logo-text{font-size:2rem;}
+  .desktop-links{display:flex!important;gap:0;align-items:center;justify-content:flex-end;}
+  .desktop-links a{font-family:'Oswald',sans-serif;font-weight:500;font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;cursor:pointer;padding:8px 14px;transition:color .2s;}
+  .desktop-links a:hover{color:var(--white);}
+  .nav-cart-btn{font-size:1rem;}
+}
+.desktop-links{display:none;}
+
+/* ── MOBILE MENU ── */
+.mobile-menu{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:490;}
+.mobile-menu.open{display:block;}
+.mobile-menu-panel{background:var(--surface);width:280px;height:100%;padding:80px 0 32px;border-right:1px solid var(--border);display:flex;flex-direction:column;}
+.mobile-menu-panel a{font-family:'Oswald',sans-serif;font-weight:600;font-size:1.1rem;letter-spacing:.1em;text-transform:uppercase;color:var(--white);text-decoration:none;cursor:pointer;padding:16px 28px;border-bottom:1px solid var(--border);display:block;transition:color .2s,background .2s;}
+.mobile-menu-panel a:hover{color:var(--gold);background:rgba(201,168,64,.05);}
+.mob-phone{margin-top:auto;padding:20px 28px 0;font-family:'Oswald',sans-serif;font-size:.82rem;color:var(--muted);letter-spacing:.08em;}
+.mob-phone a{color:var(--gold);text-decoration:none;display:inline;font-size:inherit;padding:0;border:none;}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(160deg,#0f0f0f 0%,#1a1a1a 60%,#111 100%);border-bottom:1px solid var(--border);padding:40px 20px 36px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 30%,rgba(45,122,58,.1) 0%,transparent 60%);pointer-events:none;}
+.hero::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(to right,var(--green),var(--gold),var(--green));}
+.hero-script{font-family:'Dancing Script',cursive;font-weight:700;font-size:clamp(2.8rem,10vw,5rem);color:var(--gold);-webkit-text-stroke:.4px #fff;line-height:1.1;margin-bottom:4px;}
+.hero-tag{font-family:'Oswald',sans-serif;font-weight:700;font-size:clamp(.9rem,3vw,1.3rem);letter-spacing:.18em;text-transform:uppercase;color:var(--white);margin-bottom:6px;}
+.hero-sub{font-family:'Oswald',sans-serif;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:24px;}
+.hero-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+
+/* ── BUTTONS ── */
+.btn-g{background:var(--green);color:#fff;border:none;font-family:'Oswald',sans-serif;font-weight:700;font-size:.88rem;letter-spacing:.12em;text-transform:uppercase;padding:12px 28px;border-radius:var(--r);transition:background .2s;}
+.btn-g:hover{background:var(--green2);}
+.btn-gd{background:var(--golddim);color:var(--gold);border:1px solid var(--gold);font-family:'Oswald',sans-serif;font-weight:700;font-size:.88rem;letter-spacing:.12em;text-transform:uppercase;padding:11px 24px;border-radius:var(--r);transition:all .2s;}
+.btn-gd:hover{background:var(--gold);color:var(--bg);}
+.btn-sm{font-family:'Oswald',sans-serif;font-weight:600;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;padding:7px 14px;border-radius:4px;border:1px solid;transition:all .18s;cursor:pointer;background:transparent;}
+
+/* ── INFO STRIP ── */
+.info-strip{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;text-align:center;}
+.info-item{font-family:'Oswald',sans-serif;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:6px;}
+.info-item strong{color:var(--white);font-weight:600;}
+.info-item a{color:var(--gold);text-decoration:none;}
+.info-dot{color:var(--faint);}
+
+/* ── SECTIONS ── */
+.section{padding:28px 16px;}
+@media(min-width:769px){.section{padding:40px 32px;}}
+.sec-head{font-family:'Oswald',sans-serif;font-weight:700;font-size:1.1rem;letter-spacing:.1em;text-transform:uppercase;color:var(--white);margin-bottom:16px;display:flex;align-items:center;gap:10px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+.sec-head::before{content:'';width:4px;height:20px;background:var(--green);border-radius:2px;flex-shrink:0;}
+.sec-head .sec-sub{font-size:.7rem;font-weight:400;color:var(--muted);letter-spacing:0;margin-left:4px;}
+
+/* ── CATEGORY TILES ── */
+.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+@media(min-width:600px){.cat-grid{grid-template-columns:repeat(6,1fr);gap:12px;}}
+.cat-tile{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px 8px 14px;text-align:center;cursor:pointer;transition:all .2s;}
+.cat-tile:hover{border-color:var(--green);transform:translateY(-2px);}
+.cat-tile .ce{font-size:1.8rem;display:block;margin-bottom:8px;}
+.cat-tile .cn{font-family:'Oswald',sans-serif;font-weight:600;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--white);line-height:1.3;}
+.cat-tile .cs{font-size:.6rem;color:var(--muted);display:block;margin-top:2px;}
+
+/* ── PROMO BAND ── */
+.promo{background:linear-gradient(135deg,var(--green) 0%,#1a5225 100%);margin:0 16px 28px;border-radius:var(--r);padding:22px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+@media(min-width:769px){.promo{margin:0 32px 40px;}}
+.promo-text{font-family:'Oswald',sans-serif;font-weight:700;font-size:1rem;letter-spacing:.06em;text-transform:uppercase;}
+.promo-text .pg{color:var(--gold);font-size:1.3rem;}
+.promo-sub{font-size:.76rem;color:rgba(255,255,255,.7);margin-top:3px;font-family:'Open Sans',sans-serif;}
+
+/* ── FILTER TABS ── */
+.filter-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;}
+.ftab{font-family:'Oswald',sans-serif;font-weight:600;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;background:var(--surface);color:var(--muted);border:1px solid var(--border);padding:6px 16px;border-radius:100px;cursor:pointer;transition:all .18s;}
+.ftab:hover{color:var(--white);border-color:#555;}
+.ftab.active{background:var(--green);border-color:var(--green);color:#fff;}
+
+/* ── PRODUCT GRID ── */
+.product-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+@media(min-width:600px){.product-grid{grid-template-columns:repeat(3,1fr);gap:14px;}}
+@media(min-width:900px){.product-grid{grid-template-columns:repeat(4,1fr);gap:16px;}}
+
+.pcard{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;transition:all .22s;}
+.pcard:hover{border-color:var(--green);transform:translateY(-3px);box-shadow:0 10px 28px rgba(0,0,0,.5);}
+.pcard.out-of-stock{opacity:.55;}
+
+.pimg{width:100%;aspect-ratio:1;background:linear-gradient(135deg,#1c1c1c,#252525);display:flex;align-items:center;justify-content:center;font-size:3rem;position:relative;overflow:hidden;cursor:pointer;}
+.pimg img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
+.pimg .emoji-fallback{font-size:3rem;z-index:1;position:relative;}
+
+.tbadge{position:absolute;top:7px;left:7px;font-family:'Oswald',sans-serif;font-weight:700;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;z-index:2;}
+.tbadge.indica{background:rgba(80,30,120,.88);color:#d4aaff;}
+.tbadge.sativa{background:rgba(160,90,0,.88);color:#ffd080;}
+.tbadge.hybrid{background:rgba(20,90,40,.88);color:#90ffaa;}
+.tbadge.merch{background:rgba(201,168,64,.88);color:#111;}
+.tbadge.accessory{background:rgba(60,60,180,.88);color:#c0d0ff;}
+
+.trbadge{position:absolute;top:7px;right:7px;font-family:'Oswald',sans-serif;font-weight:700;font-size:.56rem;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:3px;z-index:2;}
+.trbadge.elite{background:rgba(201,168,64,.9);color:#111;}
+.trbadge.diamond{background:rgba(120,200,240,.9);color:#111;}
+.trbadge.gold{background:rgba(200,160,30,.85);color:#111;}
+.trbadge.standard{background:rgba(80,80,80,.85);color:#eee;}
+
+.oos-tag{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.75);font-family:'Oswald',sans-serif;font-weight:700;font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:#ff7777;text-align:center;padding:5px 0;z-index:3;}
+
+.pbody{padding:10px 10px 12px;flex:1;display:flex;flex-direction:column;}
+.pname{font-family:'Oswald',sans-serif;font-weight:600;font-size:.88rem;letter-spacing:.03em;text-transform:uppercase;margin-bottom:4px;line-height:1.25;cursor:pointer;}
+.pname:hover{color:var(--gold);}
+.pdesc-short{font-size:.7rem;color:var(--muted);line-height:1.5;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+
+.wrow{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:8px;}
+.wbtn{font-family:'Open Sans',sans-serif;font-size:.62rem;font-weight:600;background:var(--surface);color:var(--muted);border:1px solid var(--border);padding:3px 7px;border-radius:4px;cursor:pointer;transition:all .15s;line-height:1.3;text-align:center;}
+.wbtn:hover{border-color:#666;color:var(--white);}
+.wbtn.sel{background:rgba(45,122,58,.15);border-color:var(--green);color:#90ffaa;}
+.wbtn .wp{display:block;font-size:.58rem;}
+
+/* variant selector (size/color for merch) */
+.var-row{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px;}
+.var-btn{font-family:'Open Sans',sans-serif;font-size:.62rem;font-weight:600;background:var(--surface);color:var(--muted);border:1px solid var(--border);padding:4px 8px;border-radius:4px;cursor:pointer;transition:all .15s;}
+.var-btn:hover{border-color:#666;color:var(--white);}
+.var-btn.sel{background:var(--golddim);border-color:var(--gold);color:var(--gold2);}
+
+.pfoot{display:flex;align-items:center;justify-content:space-between;padding-top:8px;border-top:1px solid var(--border);margin-top:auto;}
+.pprice{font-family:'Oswald',sans-serif;font-weight:700;font-size:1.1rem;color:var(--gold);}
+.padd{background:var(--green);color:#fff;border:none;font-family:'Oswald',sans-serif;font-weight:700;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;padding:7px 10px;border-radius:4px;cursor:pointer;transition:background .18s;}
+.padd:hover{background:var(--green2);}
+.padd:disabled{background:var(--faint);cursor:not-allowed;color:var(--muted);}
+
+/* ── PRODUCT DETAIL PAGE ── */
+.pdp-wrap{max-width:900px;margin:0 auto;padding:28px 16px 60px;}
+@media(min-width:769px){.pdp-wrap{padding:40px 32px 80px;}}
+.pdp-back{font-family:'Oswald',sans-serif;font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);cursor:pointer;display:inline-flex;align-items:center;gap:6px;margin-bottom:24px;transition:color .18s;}
+.pdp-back:hover{color:var(--white);}
+.pdp-grid{display:grid;grid-template-columns:1fr;gap:32px;}
+@media(min-width:600px){.pdp-grid{grid-template-columns:1fr 1fr;gap:40px;}}
+
+.pdp-img{aspect-ratio:1;background:linear-gradient(135deg,#1c1c1c,#252525);border-radius:10px;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:6rem;position:relative;border:1px solid var(--border);}
+.pdp-img img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
+.pdp-img .emoji-lg{position:relative;z-index:1;}
+
+.pdp-info{}
+.pdp-badges{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
+.pdp-badge{font-family:'Oswald',sans-serif;font-weight:700;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;padding:3px 10px;border-radius:4px;}
+.pdp-badge.indica{background:rgba(80,30,120,.3);color:#d4aaff;border:1px solid rgba(80,30,120,.5);}
+.pdp-badge.sativa{background:rgba(160,90,0,.3);color:#ffd080;border:1px solid rgba(160,90,0,.5);}
+.pdp-badge.hybrid{background:rgba(20,90,40,.3);color:#90ffaa;border:1px solid rgba(20,90,40,.5);}
+.pdp-badge.merch{background:var(--golddim);color:var(--gold2);border:1px solid rgba(201,168,64,.3);}
+.pdp-badge.tier{background:rgba(201,168,64,.15);color:var(--gold2);border:1px solid rgba(201,168,64,.3);}
+
+.pdp-name{font-family:'Oswald',sans-serif;font-weight:700;font-size:clamp(1.5rem,4vw,2.2rem);letter-spacing:.04em;text-transform:uppercase;margin-bottom:10px;line-height:1.1;}
+.pdp-price{font-family:'Oswald',sans-serif;font-weight:700;font-size:1.8rem;color:var(--gold);margin-bottom:16px;}
+.pdp-desc{font-size:.85rem;color:var(--muted);line-height:1.75;margin-bottom:20px;}
+
+.pdp-label{font-family:'Oswald',sans-serif;font-weight:700;font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.pdp-wrow{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;}
+.pdp-wbtn{font-family:'Oswald',sans-serif;font-weight:600;font-size:.8rem;background:var(--surface);color:var(--muted);border:1px solid var(--border);padding:8px 14px;border-radius:4px;cursor:pointer;transition:all .15s;text-align:center;min-width:64px;}
+.pdp-wbtn:hover{border-color:#666;color:var(--white);}
+.pdp-wbtn.sel{background:rgba(45,122,58,.15);border-color:var(--green);color:#90ffaa;}
+.pdp-wbtn .pdp-wp{display:block;font-size:.7rem;color:inherit;opacity:.8;margin-top:1px;}
+
+.pdp-var-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;}
+.pdp-var-btn{font-family:'Oswald',sans-serif;font-weight:600;font-size:.78rem;background:var(--surface);color:var(--muted);border:1px solid var(--border);padding:7px 12px;border-radius:4px;cursor:pointer;transition:all .15s;}
+.pdp-var-btn:hover{border-color:#666;color:var(--white);}
+.pdp-var-btn.sel{background:var(--golddim);border-color:var(--gold);color:var(--gold2);}
+
+.pdp-qty{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+.qty-btn{background:var(--surface);border:1px solid var(--border);color:var(--white);width:36px;height:36px;border-radius:4px;font-size:1.1rem;font-family:'Oswald',sans-serif;font-weight:700;transition:all .15s;}
+.qty-btn:hover{border-color:var(--green);}
+.qty-val{font-family:'Oswald',sans-serif;font-weight:700;font-size:1.1rem;min-width:28px;text-align:center;}
+
+.pdp-add{width:100%;background:var(--green);color:#fff;border:none;font-family:'Oswald',sans-serif;font-weight:700;font-size:1rem;letter-spacing:.14em;text-transform:uppercase;padding:15px;border-radius:var(--r);transition:background .2s;margin-bottom:10px;}
+.pdp-add:hover{background:var(--green2);}
+
+.pdp-details{margin-top:24px;padding-top:20px;border-top:1px solid var(--border);}
+.pdp-details h4{font-family:'Oswald',sans-serif;font-weight:700;font-size:.8rem;letter-spacing:.18em;text-transform:uppercase;color:var(--green2);margin-bottom:10px;}
+.pdp-detail-row{display:flex;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);font-size:.8rem;}
+.pdp-detail-row:last-child{border:none;}
+.pdp-dk{color:var(--muted);min-width:90px;}
+.pdp-dv{color:var(--white);}
+
+/* ── MERCH GRID ── */
+.merch-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+@media(min-width:600px){.merch-grid{grid-template-columns:repeat(3,1fr);gap:14px;}}
+@media(min-width:900px){.merch-grid{grid-template-columns:repeat(4,1fr);gap:16px;}}
+
+/* ── CART DRAWER ── */
+.cart-overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:600;opacity:0;pointer-events:none;transition:opacity .3s;}
+.cart-overlay.open{opacity:1;pointer-events:all;}
+.cart-drawer{position:fixed;top:0;right:0;bottom:0;width:340px;max-width:100vw;background:var(--surface);border-left:1px solid var(--border);z-index:601;transform:translateX(100%);transition:transform .32s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;}
+.cart-drawer.open{transform:translateX(0);}
+.cd-head{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg);}
+.cd-title{font-family:'Oswald',sans-serif;font-weight:700;font-size:1.2rem;letter-spacing:.08em;text-transform:uppercase;}
+.cd-close{background:var(--border);color:var(--muted);border:none;padding:6px 14px;border-radius:4px;cursor:pointer;font-family:'Oswald',sans-serif;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;transition:all .18s;}
+.cd-close:hover{background:#3a3a3a;color:var(--white);}
+.cart-body{flex:1;overflow-y:auto;padding:16px 20px;}
+.ci{display:flex;gap:10px;padding:12px 0;border-bottom:1px solid var(--border);align-items:center;}
+.ci-icon{width:44px;height:44px;background:var(--card);border:1px solid var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;overflow:hidden;}
+.ci-icon img{width:100%;height:100%;object-fit:cover;}
+.ci-name{font-family:'Oswald',sans-serif;font-weight:600;font-size:.88rem;text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px;}
+.ci-meta{font-size:.68rem;color:var(--muted);}
+.ci-price{font-family:'Oswald',sans-serif;font-weight:700;font-size:1rem;color:var(--gold);margin-left:auto;flex-shrink:0;}
+.ci-rm{background:transparent;border:none;color:var(--faint);font-size:.85rem;cursor:pointer;padding:3px 7px;border-radius:4px;transition:color .15s;flex-shrink:0;}
+.ci-rm:hover{color:#ff5555;}
+.cd-empty{text-align:center;padding:50px 20px;color:var(--muted);}
+.cd-empty .cde-icon{font-size:2.5rem;margin-bottom:12px;}
+.cd-empty p{font-family:'Oswald',sans-serif;font-size:.85rem;letter-spacing:.1em;text-transform:uppercase;}
+.cd-foot{padding:16px 20px;border-top:1px solid var(--border);}
+.cd-total-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.cd-total-lbl{font-family:'Oswald',sans-serif;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);}
+.cd-total-val{font-family:'Oswald',sans-serif;font-weight:700;font-size:1.6rem;color:var(--gold);}
+.cd-checkout{width:100%;background:var(--green);color:#fff;border:none;font-family:'Oswald',sans-serif;font-weight:700;font-size:.92rem;letter-spacing:.12em;text-transform:uppercase;padding:14px;border-radius:var(--r);cursor:pointer;transition:background .2s;margin-bottom:6px;}
+.cd-checkout:hover{background:var(--green2);}
+
+/* ── CHECKOUT ── */
+.co-wrap{max-width:620px;margin:0 auto;padding:48px 16px 60px;}
+@media(min-width:769px){.co-wrap{padding:60px 32px;}}
+.pg-label{font-family:'Oswald',sans-serif;font-size:.7rem;letter-spacing:.28em;text-transform:uppercase;color:var(--green2);margin-bottom:8px;}
+.pg-title{font-family:'Oswald',sans-serif;font-weight:700;font-size:1.8rem;letter-spacing:.04em;text-transform:uppercase;margin-bottom:28px;}
+.co-block{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:22px;margin-bottom:14px;}
+.co-block-title{font-family:'Oswald',sans-serif;font-weight:700;font-size:.82rem;letter-spacing:.2em;text-transform:uppercase;color:var(--green2);margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+.fg{margin-bottom:14px;}
+.fl{display:block;font-family:'Oswald',sans-serif;font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
+.fi{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--white);font-family:'Open Sans',sans-serif;font-size:.9rem;padding:11px 14px;border-radius:var(--r);outline:none;transition:border-color .18s;}
+.fi:focus{border-color:var(--green);}
+.fi::placeholder{color:#333;}
+.fsel{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--white);font-family:'Open Sans',sans-serif;font-size:.9rem;padding:11px 14px;border-radius:var(--r);outline:none;transition:border-color .18s;appearance:none;}
+.fsel:focus{border-color:var(--green);}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:480px){.f2{grid-template-columns:1fr;}}
+.sum-block{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:var(--r);padding:18px 20px;margin-bottom:16px;}
+.sum-title{font-family:'Oswald',sans-serif;font-weight:700;font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;}
+.sum-line{display:flex;justify-content:space-between;font-size:.8rem;padding:6px 0;border-bottom:1px solid var(--border);color:var(--muted);}
+.sum-line:last-of-type{border:none;}
+.sum-total{display:flex;justify-content:space-between;padding-top:10px;border-top:1px solid var(--border);font-family:'Oswald',sans-serif;font-weight:700;font-size:1.1rem;}
+.age-row{display:flex;gap:10px;align-items:flex-start;padding:14px;background:var(--golddim);border:1px solid rgba(201,168,64,.2);border-radius:var(--r);margin-bottom:16px;}
+.age-row input{width:17px;height:17px;accent-color:var(--gold);cursor:pointer;flex-shrink:0;margin-top:2px;}
+.age-row label{font-size:.76rem;color:var(--muted);cursor:pointer;line-height:1.55;}
+.age-row strong{color:var(--white);}
+.place-btn{width:100%;background:var(--green);color:#fff;border:none;font-family:'Oswald',sans-serif;font-weight:700;font-size:.96rem;letter-spacing:.14em;text-transform:uppercase;padding:16px;border-radius:var(--r);cursor:pointer;transition:all .2s;}
+.place-btn:hover{background:var(--green2);}
+
+/* delivery method toggle */
+.delivery-toggle{display:flex;gap:0;margin-bottom:16px;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
+.del-opt{flex:1;font-family:'Oswald',sans-serif;font-weight:600;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;padding:10px;background:var(--surface);color:var(--muted);border:none;cursor:pointer;transition:all .18s;border-right:1px solid var(--border);}
+.del-opt:last-child{border-right:none;}
+.del-opt.active{background:var(--green);color:#fff;}
+
+/* ── SUCCESS ── */
+.success-wrap{min-height:90vh;display:flex;align-items:center;justify-content:center;padding:32px 16px;}
+.success-card{background:var(--card);border:1px solid var(--border);border-top:3px solid var(--green);border-radius:10px;padding:48px 32px;max-width:460px;width:100%;text-align:center;}
+.si{font-size:3rem;margin-bottom:16px;}
+.st{font-family:'Dancing Script',cursive;font-weight:700;font-size:2.6rem;color:var(--gold);-webkit-text-stroke:.3px #fff;margin-bottom:10px;}
+.ss{color:var(--muted);font-size:.85rem;line-height:1.75;margin-bottom:24px;}
+.order-num{font-family:'Oswald',sans-serif;font-weight:700;font-size:1.1rem;color:var(--white);background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:10px 20px;display:inline-block;margin-bottom:20px;letter-spacing:.1em;}
+
+/* ── ADMIN LOGIN ── */
+.al-wrap{min-height:100vh;background:#0a0a0a;display:flex;align-items:center;justify-content:center;padding:20px;}
+.al-card{background:var(--card);border:1px solid var(--border);border-top:3px solid var(--green);border-radius:10px;padding:44px 36px;width:100%;max-width:380px;}
+.al-logo{font-family:'Dancing Script',cursive;font-weight:700;font-size:2.3rem;color:var(--gold);-webkit-text-stroke:.3px #fff;text-align:center;display:block;margin-bottom:4px;}
+.al-sub{font-family:'Oswald',sans-serif;font-size:.68rem;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);text-align:center;margin-bottom:28px;}
+.al-err{background:rgba(204,34,34,.08);border:1px solid rgba(204,34,34,.3);color:#ff6666;font-size:.76rem;padding:9px 13px;border-radius:var(--r);margin-bottom:14px;display:none;font-family:'Oswald',sans-serif;font-weight:600;letter-spacing:.06em;text-transform:uppercase;}
+.al-hint{text-align:center;font-size:.68rem;color:var(--muted);margin-top:14px;line-height:1.7;}
+.al-hint strong{color:var(--white);}
+
+/* ── ADMIN SHELL ── */
+.adm-wrap{min-height:100vh;background:#0a0a0a;display:flex;flex-direction:column;}
+.adm-bar{background:var(--surface);border-bottom:3px solid var(--green);padding:0 20px;height:56px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.adm-brand{font-family:'Dancing Script',cursive;font-weight:700;font-size:1.5rem;color:var(--gold);-webkit-text-stroke:.3px #fff;}
+.adm-tag{font-family:'Oswald',sans-serif;font-weight:600;font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-left:8px;}
+
+/* admin tabs */
+.adm-tabs{background:var(--surface);border-bottom:1px solid var(--border);display:flex;gap:0;overflow-x:auto;flex-shrink:0;}
+.adm-tab{font-family:'Oswald',sans-serif;font-weight:600;font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);background:transparent;border:none;border-bottom:2px solid transparent;padding:14px 20px;cursor:pointer;white-space:nowrap;transition:all .18s;}
+.adm-tab:hover{color:var(--white);}
+.adm-tab.active{color:var(--green2);border-bottom-color:var(--green);}
+
+.adm-body{padding:20px;flex:1;overflow-y:auto;}
+.adm-panel{display:none;}
+.adm-panel.active{display:block;}
+
+/* stats */
+.stats-row{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:24px;}
+@media(min-width:600px){.stats-row{grid-template-columns:repeat(4,1fr);}}
+.sc{background:var(--card);border:1px solid var(--border);border-top:2px solid var(--green);border-radius:var(--r);padding:18px 16px;}
+.sc-num{font-family:'Oswald',sans-serif;font-weight:700;font-size:2.2rem;color:var(--gold);line-height:1;margin-bottom:4px;}
+.sc-lbl{font-family:'Oswald',sans-serif;font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);}
+
+.adm-sec{font-family:'Oswald',sans-serif;font-weight:700;font-size:1.1rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.adm-sec::before{content:'';width:3px;height:18px;background:var(--green);border-radius:2px;}
+
+/* orders table */
+.otbl-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--r);}
+.otbl{width:100%;border-collapse:collapse;font-size:.8rem;background:var(--card);}
+.otbl th{background:var(--surface);padding:10px 14px;text-align:left;font-family:'Oswald',sans-serif;font-weight:600;font-size:.64rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);}
+.otbl td{padding:12px 14px;border-bottom:1px solid var(--border);vertical-align:middle;}
+.otbl tbody tr:last-child td{border:none;}
+.otbl tbody tr:hover td{background:rgba(255,255,255,.015);}
+.spill{font-family:'Oswald',sans-serif;font-weight:700;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:100px;}
+.s-pend{background:rgba(201,168,64,.12);color:var(--gold);border:1px solid rgba(201,168,64,.3);}
+.s-out{background:rgba(45,122,58,.12);color:#6ddd8a;border:1px solid rgba(45,122,58,.35);}
+.s-done{background:rgba(255,255,255,.05);color:var(--muted);border:1px solid var(--border);}
+.tbtn{font-family:'Oswald',sans-serif;font-weight:600;font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;border:1px solid;padding:4px 10px;border-radius:4px;cursor:pointer;background:transparent;margin-right:4px;transition:all .15s;}
+.tbtn.view{border-color:var(--border);color:var(--muted);}
+.tbtn.view:hover{border-color:var(--white);color:var(--white);}
+.tbtn.disp{border-color:rgba(45,122,58,.5);color:#6ddd8a;}
+.tbtn.disp:hover{background:rgba(45,122,58,.12);}
+.tbtn.done{border-color:rgba(201,168,64,.5);color:var(--gold);}
+.tbtn.done:hover{background:var(--golddim);}
+.tbtn.del{border-color:rgba(204,34,34,.4);color:#ff6666;}
+.tbtn.del:hover{background:rgba(204,34,34,.08);}
+
+/* product manager */
+.pm-grid{display:grid;grid-template-columns:1fr;gap:10px;}
+@media(min-width:600px){.pm-grid{grid-template-columns:repeat(2,1fr);}}
+@media(min-width:900px){.pm-grid{grid-template-columns:repeat(3,1fr);}}
+
+.pm-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;}
+.pm-img{height:120px;background:linear-gradient(135deg,#1c1c1c,#252525);display:flex;align-items:center;justify-content:center;font-size:2.5rem;position:relative;overflow:hidden;}
+.pm-img img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
+.pm-img .emoji-pm{position:relative;z-index:1;}
+.pm-body{padding:12px 14px;flex:1;}
+.pm-name{font-family:'Oswald',sans-serif;font-weight:700;font-size:.95rem;text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px;}
+.pm-meta{font-size:.7rem;color:var(--muted);margin-bottom:10px;}
+.pm-actions{display:flex;gap:6px;flex-wrap:wrap;}
+.pm-oos{font-family:'Oswald',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:3px;}
+.pm-oos.in{background:rgba(45,122,58,.15);color:#6ddd8a;border:1px solid rgba(45,122,58,.3);}
+.pm-oos.out{background:rgba(204,34,34,.12);color:#ff7777;border:1px solid rgba(204,34,34,.3);}
+
+/* product editor modal */
+.pe-overlay{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:800;display:flex;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto;opacity:0;pointer-events:none;transition:opacity .22s;}
+.pe-overlay.open{opacity:1;pointer-events:all;}
+.pe-card{background:var(--surface);border:1px solid var(--border);border-top:2px solid var(--green);border-radius:10px;padding:28px;max-width:580px;width:100%;margin:auto;}
+.pe-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;}
+.pe-title{font-family:'Oswald',sans-serif;font-weight:700;font-size:1.2rem;letter-spacing:.08em;text-transform:uppercase;color:var(--green2);}
+
+/* image upload area */
+.img-upload{border:2px dashed var(--border);border-radius:var(--r);padding:24px;text-align:center;cursor:pointer;transition:border-color .2s;position:relative;overflow:hidden;margin-bottom:16px;}
+.img-upload:hover{border-color:var(--green);}
+.img-upload input{position:absolute;inset:0;opacity:0;cursor:pointer;}
+.img-upload .iu-icon{font-size:2rem;margin-bottom:8px;}
+.img-upload .iu-text{font-family:'Oswald',sans-serif;font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
+.img-upload .iu-preview{width:100%;max-height:160px;object-fit:cover;border-radius:4px;display:none;}
+
+/* price inputs grid */
+.price-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px;}
+@media(min-width:480px){.price-grid{grid-template-columns:repeat(4,1fr);}}
+
+/* modal for orders */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:700;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .22s;}
+.modal-bg.open{opacity:1;pointer-events:all;}
+.modal-card{background:var(--surface);border:1px solid var(--border);border-top:2px solid var(--green);border-radius:10px;padding:28px;max-width:500px;width:100%;max-height:82vh;overflow-y:auto;}
+.m-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
+.m-id{font-family:'Oswald',sans-serif;font-weight:700;font-size:1.2rem;letter-spacing:.08em;color:var(--gold);}
+.dr{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:.82rem;}
+.dr:last-child{border:none;}
+.dk{color:var(--muted);}
+.dv{color:var(--white);text-align:right;max-width:60%;font-weight:500;}
+
+/* toast */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(12px);background:var(--green);color:#fff;font-family:'Oswald',sans-serif;font-weight:700;font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;padding:12px 22px;border-radius:var(--r);z-index:9100;opacity:0;transition:all .25s;pointer-events:none;white-space:nowrap;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.gold{background:var(--gold);color:var(--bg);}
+
+/* footer */
+.footer{background:var(--surface);border-top:3px solid var(--green);padding:40px 16px 0;margin-top:48px;}
+@media(min-width:769px){.footer{padding:48px 32px 0;}}
+.footer-grid{display:grid;grid-template-columns:1fr;gap:28px;margin-bottom:36px;}
+@media(min-width:600px){.footer-grid{grid-template-columns:2fr 1fr 1fr;gap:40px;}}
+.fl-logo{font-family:'Dancing Script',cursive;font-weight:700;font-size:1.9rem;color:var(--gold);-webkit-text-stroke:.3px #fff;display:block;margin-bottom:8px;cursor:pointer;}
+.fl-tag{font-size:.78rem;color:var(--muted);line-height:1.7;max-width:280px;}
+.fl-phone{margin-top:12px;font-family:'Oswald',sans-serif;font-size:.78rem;color:var(--muted);letter-spacing:.06em;}
+.fl-phone a{color:var(--gold);text-decoration:none;}
+.fc h4{font-family:'Oswald',sans-serif;font-weight:700;font-size:.65rem;letter-spacing:.25em;text-transform:uppercase;color:var(--green2);margin-bottom:12px;}
+.fc a{display:block;color:var(--muted);text-decoration:none;font-size:.82rem;margin-bottom:9px;cursor:pointer;transition:color .18s;}
+.fc a:hover{color:var(--white);}
+.age-disclaimer{background:#0d0d0d;border-top:1px solid var(--border);padding:14px 16px;margin-top:36px;text-align:center;}
+.age-disclaimer p{font-size:.7rem;color:var(--faint);line-height:1.65;max-width:680px;margin:0 auto;}
+.age-disclaimer strong{color:var(--muted);}
+.footer-bottom{padding:12px 16px;background:#0d0d0d;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
+.footer-bottom span{font-family:'Oswald',sans-serif;font-size:.65rem;color:var(--faint);letter-spacing:.08em;text-transform:uppercase;}
+
+/* utility */
+.hidden{display:none!important;}
+</style>
+</head>
+<body>
+
+<!-- ════ AGE GATE ════ -->
+<div id="age-gate">
+  <div class="ag-box" id="ag-main">
+    <div class="ag-logo">Pressure SA</div>
+    <div class="ag-subtitle">Premium Flower · Personal Use Only</div>
+    <div class="ag-icon">🔞</div>
+    <div class="ag-title">Age Verification Required</div>
+    <p class="ag-text">You must be <strong>21 years of age or older</strong> to enter this site. All products are sold for personal, decorative, and aromatic use only.</p>
+    <div class="ag-btns">
+      <button class="ag-yes" onclick="passAgeGate()">I Am 21 or Older</button>
+      <button class="ag-no" onclick="denyAgeGate()">I Am Under 21</button>
+    </div>
+  </div>
+  <div class="ag-denied" id="ag-denied">
+    <div style="font-size:3rem;margin-bottom:16px">🚫</div>
+    <p style="font-family:'Oswald',sans-serif;font-size:1.1rem;letter-spacing:.08em;text-transform:uppercase;color:var(--white);margin-bottom:12px">Access Denied</p>
+    <p>You must be 21 or older to access this site.</p>
+  </div>
+</div>
+
+<!-- ════ STORE PAGE ════ -->
+<div id="page-store" class="page active">
+  <div class="topbar">
+    <a href="tel:+17262618038">📞 +1 (726) 261-8038 · Text for Telegram</a>
+    <div class="topbar-right">We Deliver 24/7 · Personal Use Only</div>
+  </div>
+  <nav class="navbar">
+    <button class="hamburger" id="hamBtn" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+    <a class="nav-logo" onclick="goPage('page-store')"><span class="nav-logo-text">Pressure SA</span></a>
+    <div class="desktop-links"><a onclick="scrollToShop()">Shop</a><a onclick="goPage('page-merch')">Merch</a></div>
+    <button class="nav-cart-btn" onclick="toggleCart()">🛒<span class="cart-count-badge" id="cnt">0</span></button>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu" onclick="if(event.target===this)toggleMenu()">
+    <div class="mobile-menu-panel">
+      <a onclick="scrollToShop();toggleMenu()">🌿 Shop</a>
+      <a onclick="goPage('page-merch');toggleMenu()">👕 Merch</a>
+      <a onclick="toggleMenu()">📖 About</a>
+      <a href="tel:+17262618038">📞 Call Us</a>
+      <div class="mob-phone"><a href="tel:+17262618038">+1 (726) 261-8038</a><br>Text for Telegram · 24/7</div>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="hero-script">Pressure SA</div>
+    <div class="hero-tag">We Deliver 24/7</div>
+    <div class="hero-sub">Premium Flower · Smoke Shop · Personal Use Only</div>
+    <div class="hero-btns">
+      <button class="btn-g" onclick="scrollToShop()">Shop Now</button>
+      <button class="btn-gd" onclick="goPage('page-merch')">Merch</button>
+    </div>
+  </div>
+
+  <div class="info-strip">
+    <div class="info-item">📞 <a href="tel:+17262618038">+1 (726) 261-8038</a></div>
+    <div class="info-dot">·</div>
+    <div class="info-item">🚗 <strong>24/7 Delivery</strong></div>
+    <div class="info-dot">·</div>
+    <div class="info-item">⚠️ <strong>21+</strong>&nbsp;· Personal Use Only</div>
+  </div>
+
+  <div class="section">
+    <div class="sec-head">Shop by Category</div>
+    <div class="cat-grid">
+      <div class="cat-tile" onclick="scrollToShop()"><span class="ce">🌿</span><div class="cn">Flower</div></div>
+      <div class="cat-tile"><span class="ce">🪨</span><div class="cn">Concentrates</div><span class="cs">Coming Soon</span></div>
+      <div class="cat-tile"><span class="ce">🔥</span><div class="cn">Pre-Rolls</div><span class="cs">Coming Soon</span></div>
+      <div class="cat-tile"><span class="ce">💨</span><div class="cn">Disposables</div><span class="cs">Coming Soon</span></div>
+      <div class="cat-tile"><span class="ce">🍬</span><div class="cn">Edibles</div><span class="cs">Coming Soon</span></div>
+      <div class="cat-tile" onclick="goPage('page-merch')"><span class="ce">👕</span><div class="cn">Merch</div></div>
+    </div>
+  </div>
+
+  <div class="promo">
+    <div>
+      <div class="promo-text">We Deliver <span class="pg">24/7</span></div>
+      <div class="promo-sub">Text or order online · Same-day everywhere we serve</div>
+    </div>
+    <button class="btn-gd" onclick="scrollToShop()">Order Now</button>
+  </div>
+
+  <div class="section" id="shop">
+    <div class="sec-head">Premium Flower <span class="sec-sub" id="pcnt"></span></div>
+    <div class="filter-bar">
+      <button class="ftab active" onclick="filterP('all',this)">All Strains</button>
+      <button class="ftab" onclick="filterP('indica',this)">Indica</button>
+      <button class="ftab" onclick="filterP('sativa',this)">Sativa</button>
+      <button class="ftab" onclick="filterP('hybrid',this)">Hybrid</button>
+    </div>
+    <div class="product-grid" id="pgrid"></div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-grid">
+      <div>
+        <span class="fl-logo" onclick="goPage('page-store')">Pressure SA</span>
+        <p class="fl-tag">Premium curated botanicals for personal use. 24/7 delivery wherever we serve. Always in full compliance with Texas state law.</p>
+        <div class="fl-phone">📞 <a href="tel:+17262618038">+1 (726) 261-8038</a></div>
+      </div>
+      <div class="fc">
+        <h4>Shop</h4>
+        <a onclick="scrollToShop()">Flower</a>
+        <a onclick="goPage('page-merch')">Merch</a>
+        <a>Concentrates (Soon)</a>
+        <a>Pre-Rolls (Soon)</a>
+      </div>
+      <div class="fc">
+        <h4>Info</h4>
+        <a>About</a>
+        <a href="tel:+17262618038">Contact</a>
+      </div>
+    </div>
+    <div class="age-disclaimer">
+      <p><strong>Personal Use Only · 21+ Required</strong><br>All products sold by Pressure SA are intended strictly for personal, decorative, aromatic, and display purposes only. By placing an order you confirm you are 21 years of age or older and that items are not purchased for any specific consumable purpose. Pressure SA operates in full compliance with applicable Texas state regulations.</p>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Pressure SA</span>
+      <span>Personal Use Only · 21+ · Texas</span>
+      <span onclick="goPage('page-admin-login')" style="cursor:pointer;color:var(--faint);opacity:.35;font-size:.55rem;letter-spacing:.04em;text-transform:lowercase;user-select:none">staff</span>
+    </div>
+  </footer>
+</div>
+
+<!-- ════ PRODUCT DETAIL PAGE ════ -->
+<div id="page-pdp" class="page">
+  <div class="topbar"><a href="tel:+17262618038">📞 +1 (726) 261-8038</a><div class="topbar-right">We Deliver 24/7</div></div>
+  <nav class="navbar">
+    <button class="hamburger" onclick="goBack()">←</button>
+    <a class="nav-logo" onclick="goPage('page-store')"><span class="nav-logo-text">Pressure SA</span></a>
+    <button class="nav-cart-btn" onclick="toggleCart()">🛒<span class="cart-count-badge" id="cnt-pdp">0</span></button>
+  </nav>
+  <div class="pdp-wrap">
+    <div class="pdp-back" onclick="goBack()">← Back</div>
+    <div class="pdp-grid" id="pdp-content"></div>
+  </div>
+</div>
+
+<!-- ════ MERCH PAGE ════ -->
+<div id="page-merch" class="page">
+  <div class="topbar"><a href="tel:+17262618038">📞 +1 (726) 261-8038</a><div class="topbar-right">We Deliver 24/7</div></div>
+  <nav class="navbar">
+    <button class="hamburger" id="hamBtn2" onclick="toggleMenu2()"><span></span><span></span><span></span></button>
+    <a class="nav-logo" onclick="goPage('page-store')"><span class="nav-logo-text">Pressure SA</span></a>
+    <div class="desktop-links"><a onclick="goPage('page-store')">← Shop</a></div>
+    <button class="nav-cart-btn" onclick="toggleCart()">🛒<span class="cart-count-badge" id="cnt-merch">0</span></button>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu2" onclick="if(event.target===this)toggleMenu2()">
+    <div class="mobile-menu-panel">
+      <a onclick="goPage('page-store');toggleMenu2()">🌿 Shop Flower</a>
+      <a onclick="toggleMenu2()">📖 About</a>
+      <a href="tel:+17262618038">📞 Call Us</a>
+    </div>
+  </div>
+  <div class="hero" style="padding:28px 20px 24px">
+    <div class="hero-script" style="font-size:clamp(2rem,7vw,3.5rem)">Pressure SA Merch</div>
+    <div class="hero-sub">Rep the brand · Tees, Hats & More</div>
+  </div>
+  <div class="section">
+    <div class="sec-head">All Merch</div>
+    <div class="merch-grid" id="merch-grid"></div>
+  </div>
+  <footer class="footer">
+    <div class="age-disclaimer"><p><strong>Pressure SA</strong> · Personal Use Only · 21+ · Texas</p></div>
+    <div class="footer-bottom"><span>© 2025 Pressure SA</span><span onclick="goPage('page-admin-login')" style="cursor:pointer;color:var(--faint);opacity:.35;font-size:.55rem;user-select:none">staff</span></div>
+  </footer>
+</div>
+
+<!-- ════ CHECKOUT ════ -->
+<div id="page-checkout" class="page">
+  <div class="topbar" style="background:var(--surface)"><span style="font-family:'Oswald',sans-serif;font-size:.75rem;color:var(--muted);letter-spacing:.08em">SECURE CHECKOUT</span><span style="font-family:'Oswald',sans-serif;font-size:.72rem;color:var(--muted)">🔒 SSL</span></div>
+  <nav class="navbar">
+    <button class="hamburger" onclick="goBack()">←</button>
+    <a class="nav-logo" onclick="goPage('page-store')"><span class="nav-logo-text">Pressure SA</span></a>
+    <button class="nav-cart-btn" onclick="toggleCart()">🛒<span class="cart-count-badge" id="cnt2">0</span></button>
+  </nav>
+  <div class="co-wrap">
+    <div class="pg-label">Secure Checkout</div>
+    <h2 class="pg-title">Your Order</h2>
+    <div class="sum-block" id="co-summary"></div>
+    <div class="co-block">
+      <div class="co-block-title">🚗 Delivery Method</div>
+      <div class="delivery-toggle">
+        <button class="del-opt active" onclick="setDelivery('delivery',this)">🚗 Delivery</button>
+        <button class="del-opt" onclick="setDelivery('pickup',this)">🏪 Pickup</button>
+      </div>
+      <div id="delivery-fields">
+        <div class="fg"><label class="fl">Street Address *</label><input class="fi" id="co-addr" placeholder="123 Main St"></div>
+        <div class="f2">
+          <div class="fg"><label class="fl">City *</label><input class="fi" id="co-city" placeholder="City"></div>
+          <div class="fg"><label class="fl">ZIP *</label><input class="fi" id="co-zip" placeholder="78201"></div>
+        </div>
+        <div class="fg"><label class="fl">Delivery Notes</label><input class="fi" id="co-notes" placeholder="Gate code, apt #, etc."></div>
+      </div>
+      <div id="pickup-fields" class="hidden">
+        <p style="font-size:.82rem;color:var(--muted);padding:12px;background:var(--surface);border-radius:var(--r);line-height:1.6">We'll text you a pickup location after your order is confirmed.<br>📞 <a href="tel:+17262618038" style="color:var(--gold)">+1 (726) 261-8038</a></p>
+      </div>
+    </div>
+    <div class="co-block">
+      <div class="co-block-title">👤 Your Info</div>
+      <div class="fg"><label class="fl">Full Name *</label><input class="fi" id="co-name" placeholder="First Last"></div>
+      <div class="f2">
+        <div class="fg"><label class="fl">Phone *</label><input class="fi" id="co-phone" placeholder="(210) 555-0000" type="tel"></div>
+        <div class="fg"><label class="fl">Email (optional)</label><input class="fi" id="co-email" placeholder="you@email.com" type="email"></div>
+      </div>
+      <div class="fg">
+        <label class="fl">Preferred Contact</label>
+        <select class="fi fsel" id="co-contact">
+          <option value="text">Text Message</option>
+          <option value="telegram">Telegram</option>
+          <option value="call">Phone Call</option>
+        </select>
+      </div>
+    </div>
+    <div class="age-row">
+      <input type="checkbox" id="co-age">
+      <label for="co-age">I confirm I am <strong>21 years of age or older</strong> and understand all items are for personal, decorative, and aromatic use only.</label>
+    </div>
+    <button class="place-btn" onclick="placeOrder()">Place Order — 24/7 Delivery</button>
+  </div>
+</div>
+
+<!-- ════ SUCCESS ════ -->
+<div id="page-success" class="page">
+  <nav class="navbar"><button class="hamburger" style="visibility:hidden"></button><a class="nav-logo" onclick="goPage('page-store')"><span class="nav-logo-text">Pressure SA</span></a><div></div></nav>
+  <div class="success-wrap">
+    <div class="success-card">
+      <div class="si">✅</div>
+      <div class="st">Order Placed!</div>
+      <div class="order-num" id="success-order-num">PSA-000</div>
+      <p class="ss">Your order is confirmed. We'll reach out via your preferred contact method and deliver same-day.<br><br>
+        <strong style="color:#6ddd8a">Estimated: 1–2 Hours</strong><br><br>
+        Questions? <a href="tel:+17262618038" style="color:var(--gold)">+1 (726) 261-8038</a>
+      </p>
+      <button class="btn-g" onclick="goPage('page-store');cart=[];renderCart();updateCount()">Continue Shopping</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ ADMIN LOGIN ════ -->
+<div id="page-admin-login" class="page">
+  <div class="al-wrap">
+    <div class="al-card">
+      <span class="al-logo">Pressure SA</span>
+      <div class="al-sub">Staff Portal</div>
+      <div class="al-err" id="lerr">Invalid credentials. Please try again.</div>
+      <div class="fg"><label class="fl">Username</label><input class="fi" id="lu" placeholder="username" type="text" autocomplete="off"></div>
+      <div class="fg" style="margin-bottom:20px"><label class="fl">Password</label><input class="fi" id="lp" placeholder="••••••••" type="password" onkeydown="if(event.key==='Enter')doLogin()"></div>
+      <button class="place-btn" onclick="doLogin()">Sign In →</button>
+      <div class="al-hint">Demo: <strong>admin</strong> / <strong>pressure2025</strong><br>or: <strong>staff</strong> / <strong>staff123</strong></div>
+      <button class="btn-gd" onclick="goPage('page-store')" style="width:100%;margin-top:12px;padding:10px">← Back to Store</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ ADMIN DASHBOARD ════ -->
+<div id="page-admin" class="page">
+  <div class="adm-wrap">
+    <div class="adm-bar">
+      <div><span class="adm-brand">Pressure SA</span><span class="adm-tag">Staff</span></div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <span id="agreet" style="font-family:'Oswald',sans-serif;font-size:.7rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase"></span>
+        <button class="tbtn view" onclick="goPage('page-store')">← Store</button>
+        <button class="tbtn view" onclick="goPage('page-admin-login')">Logout</button>
+      </div>
+    </div>
+
+    <!-- ADMIN TABS -->
+    <div class="adm-tabs">
+      <button class="adm-tab active" onclick="switchAdmTab('tab-orders',this)">📋 Orders</button>
+      <button class="adm-tab" onclick="switchAdmTab('tab-products',this)">🌿 Products</button>
+      <button class="adm-tab" onclick="switchAdmTab('tab-merch-admin',this)">👕 Merch</button>
+      <button class="adm-tab" onclick="switchAdmTab('tab-settings',this)">⚙️ Settings</button>
+    </div>
+
+    <div class="adm-body">
+
+      <!-- ORDERS TAB -->
+      <div class="adm-panel active" id="tab-orders">
+        <div class="stats-row" id="astats"></div>
+        <div class="adm-sec">Live Orders</div>
+        <div class="otbl-wrap">
+          <table class="otbl">
+            <thead><tr><th>#</th><th>Customer</th><th>Phone</th><th>Contact</th><th>Address</th><th>Items</th><th>Total</th><th>Status</th><th>Time</th><th>Actions</th></tr></thead>
+            <tbody id="atbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PRODUCTS TAB -->
+      <div class="adm-panel" id="tab-products">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">
+          <div class="adm-sec" style="margin-bottom:0">Flower Products</div>
+          <button class="btn-g" onclick="openProductEditor(null,'flower')" style="font-size:.78rem;padding:9px 18px">+ Add Product</button>
+        </div>
+        <div class="pm-grid" id="pm-grid"></div>
+      </div>
+
+      <!-- MERCH ADMIN TAB -->
+      <div class="adm-panel" id="tab-merch-admin">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">
+          <div class="adm-sec" style="margin-bottom:0">Merch Products</div>
+          <button class="btn-g" onclick="openProductEditor(null,'merch')" style="font-size:.78rem;padding:9px 18px">+ Add Merch</button>
+        </div>
+        <div class="pm-grid" id="pm-merch-grid"></div>
+      </div>
+
+      <!-- SETTINGS TAB -->
+      <div class="adm-panel" id="tab-settings">
+        <div class="adm-sec">Store Settings</div>
+        <div style="max-width:480px">
+          <div class="co-block">
+            <div class="co-block-title">📞 Contact Info</div>
+            <div class="fg"><label class="fl">Phone Number</label><input class="fi" id="set-phone" value="+1 (726) 261-8038"></div>
+            <div class="fg"><label class="fl">Telegram Handle</label><input class="fi" id="set-telegram" placeholder="@pressureSA"></div>
+          </div>
+          <div class="co-block">
+            <div class="co-block-title">🚗 Delivery Settings</div>
+            <div class="fg"><label class="fl">Delivery Hours</label><input class="fi" id="set-hours" value="24/7"></div>
+            <div class="fg"><label class="fl">Delivery Radius / Areas</label><input class="fi" id="set-areas" placeholder="e.g. San Antonio, Austin, etc."></div>
+            <div class="fg"><label class="fl">Min Order Amount ($)</label><input class="fi" id="set-min" type="number" value="40"></div>
+          </div>
+          <div class="co-block">
+            <div class="co-block-title">🔑 Change Password</div>
+            <div class="fg"><label class="fl">Current Password</label><input class="fi" type="password" placeholder="••••••••"></div>
+            <div class="fg"><label class="fl">New Password</label><input class="fi" type="password" placeholder="••••••••"></div>
+            <div class="fg"><label class="fl">Confirm New Password</label><input class="fi" type="password" placeholder="••••••••"></div>
+          </div>
+          <button class="place-btn" onclick="showToast('Settings saved!','gold')">Save Settings</button>
+        </div>
+      </div>
+
+    </div><!-- /adm-body -->
+  </div>
+</div>
+
+<!-- ════ PRODUCT EDITOR MODAL ════ -->
+<div class="pe-overlay" id="pe-overlay">
+  <div class="pe-card">
+    <div class="pe-head">
+      <div class="pe-title" id="pe-title">Edit Product</div>
+      <button class="cd-close" onclick="closePE()">Close ✕</button>
+    </div>
+    <input type="hidden" id="pe-id">
+    <input type="hidden" id="pe-category">
+
+    <div class="img-upload" id="pe-img-drop">
+      <input type="file" accept="image/*" onchange="handleImgUpload(event)">
+      <img class="iu-preview" id="pe-img-preview">
+      <div id="pe-img-placeholder">
+        <div class="iu-icon">📸</div>
+        <div class="iu-text">Click or drag to upload photo</div>
+      </div>
+    </div>
+
+    <div class="f2" style="margin-bottom:14px">
+      <div class="fg" style="margin-bottom:0">
+        <label class="fl">Product Name *</label>
+        <input class="fi" id="pe-name" placeholder="e.g. Runtz">
+      </div>
+      <div class="fg" style="margin-bottom:0">
+        <label class="fl">Emoji (fallback)</label>
+        <input class="fi" id="pe-emoji" placeholder="🌿" style="font-size:1.2rem">
+      </div>
+    </div>
+
+    <div class="f2" style="margin-bottom:14px" id="pe-type-row">
+      <div class="fg" style="margin-bottom:0">
+        <label class="fl">Type</label>
+        <select class="fi fsel" id="pe-type">
+          <option value="hybrid">Hybrid</option>
+          <option value="indica">Indica</option>
+          <option value="sativa">Sativa</option>
+        </select>
+      </div>
+      <div class="fg" style="margin-bottom:0">
+        <label class="fl">Tier</label>
+        <select class="fi fsel" id="pe-tier">
+          <option value="elite">Elite</option>
+          <option value="diamond">Diamond</option>
+          <option value="gold">Gold</option>
+          <option value="standard">Standard</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- merch-only fields -->
+    <div id="pe-merch-row" class="hidden" style="margin-bottom:14px">
+      <div class="fg" style="margin-bottom:8px">
+        <label class="fl">Sizes Available (comma separated)</label>
+        <input class="fi" id="pe-sizes" placeholder="S, M, L, XL, XXL">
+      </div>
+      <div class="fg" style="margin-bottom:0">
+        <label class="fl">Colors Available (comma separated)</label>
+        <input class="fi" id="pe-colors" placeholder="Black, White, Green">
+      </div>
+    </div>
+
+    <div class="fg" style="margin-bottom:14px">
+      <label class="fl">Description</label>
+      <textarea class="fi" id="pe-desc" placeholder="Describe the product..." rows="3" style="resize:vertical;line-height:1.6"></textarea>
+    </div>
+
+    <!-- flower prices -->
+    <div id="pe-price-flower">
+      <label class="fl" style="margin-bottom:8px">Prices by Weight</label>
+      <div class="price-grid">
+        <div class="fg" style="margin-bottom:0"><label class="fl">1/8 oz ($)</label><input class="fi" id="pe-p35" type="number" placeholder="45"></div>
+        <div class="fg" style="margin-bottom:0"><label class="fl">1/4 oz ($)</label><input class="fi" id="pe-p7" type="number" placeholder="80"></div>
+        <div class="fg" style="margin-bottom:0"><label class="fl">1/2 oz ($)</label><input class="fi" id="pe-p14" type="number" placeholder="150"></div>
+        <div class="fg" style="margin-bottom:0"><label class="fl">1 oz ($)</label><input class="fi" id="pe-p28" type="number" placeholder="280"></div>
+      </div>
+    </div>
+
+    <!-- merch price -->
+    <div id="pe-price-merch" class="hidden">
+      <div class="fg"><label class="fl">Price ($)</label><input class="fi" id="pe-price-single" type="number" placeholder="35"></div>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:8px;flex:1">
+        <input type="checkbox" id="pe-oos" style="width:16px;height:16px;accent-color:var(--red)">
+        <label for="pe-oos" style="font-family:'Oswald',sans-serif;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);cursor:pointer">Mark as Out of Stock</label>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;flex:1">
+        <input type="checkbox" id="pe-featured" style="width:16px;height:16px;accent-color:var(--gold)">
+        <label for="pe-featured" style="font-family:'Oswald',sans-serif;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);cursor:pointer">Featured Product</label>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:20px">
+      <button class="place-btn" onclick="saveProduct()" style="flex:2">Save Product</button>
+      <button class="tbtn del" onclick="deleteProduct()" style="flex:1;padding:12px" id="pe-delete-btn">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- ORDER DETAIL MODAL -->
+<div class="modal-bg" id="omodal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-card" id="omc"></div>
+</div>
+
+<!-- CART DRAWER -->
+<div class="cart-overlay" id="covl" onclick="toggleCart()"></div>
+<div class="cart-drawer" id="cdrawer">
+  <div class="cd-head"><div class="cd-title">Your Cart</div><button class="cd-close" onclick="toggleCart()">Close ✕</button></div>
+  <div class="cart-body" id="cbody"></div>
+  <div class="cd-foot" id="cfoot"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ══════════════════════════════════════════
+   DATA STORE
+══════════════════════════════════════════ */
+let PRODUCTS = [
+  {id:1,cat:'flower',name:"Runtz",         type:"hybrid", tier:"elite",   emoji:"🍬",img:null,desc:"Sweet, fruity aroma with dense, colorful buds. One of the most visually striking display pieces in the collection.",  prices:{3.5:45,7:80,14:150,28:280},oos:false,featured:true},
+  {id:2,cat:'flower',name:"Gorilla Glue",  type:"hybrid", tier:"diamond", emoji:"🌿",img:null,desc:"Earthy, piney and pungent. Heavy resinous buds with a complex skunky aromatic profile that fills a room.",           prices:{3.5:40,7:75,14:140,28:260},oos:false,featured:false},
+  {id:3,cat:'flower',name:"Purple Punch",  type:"indica", tier:"elite",   emoji:"🍇",img:null,desc:"Grape and blueberry aromatic notes with deep purple hues. As beautiful to display as it is fragrant.",               prices:{3.5:45,7:80,14:150,28:280},oos:false,featured:true},
+  {id:4,cat:'flower',name:"Zkittlez",      type:"indica", tier:"elite",   emoji:"🌸",img:null,desc:"Tropical candy-like fragrance with multi-colored buds that stand out in any personal collection.",                   prices:{3.5:50,7:90,14:170,28:320},oos:false,featured:false},
+  {id:5,cat:'flower',name:"Durban Poison", type:"sativa", tier:"diamond", emoji:"⚡",img:null,desc:"Spicy anise-forward aroma with tall elongated buds and a bright energetic green appearance.",                        prices:{3.5:40,7:72,14:135,28:250},oos:false,featured:false},
+  {id:6,cat:'flower',name:"Jack Herer",    type:"sativa", tier:"gold",    emoji:"🌾",img:null,desc:"Spicy herbal citrus profile. A classic strain prized for its striking visual appearance and complex aroma.",          prices:{3.5:42,7:76,14:142,28:265},oos:false,featured:false},
+  {id:7,cat:'flower',name:"Gelato #33",    type:"hybrid", tier:"elite",   emoji:"🍨",img:null,desc:"Lavender and fruity sweetness. Dense, sticky and colorful — a true display-worthy centerpiece.",                     prices:{3.5:50,7:90,14:170,28:320},oos:false,featured:true},
+  {id:8,cat:'flower',name:"Granddaddy P",  type:"indica", tier:"diamond", emoji:"💜",img:null,desc:"Berry and grape aroma with deep purple buds and fiery orange hairs. One of the most visually spectacular specimens.", prices:{3.5:45,7:80,14:150,28:280},oos:false,featured:false},
+];
+
+let MERCH = [
+  {id:101,cat:'merch',name:"Pressure SA Tee",      emoji:"👕",img:null,desc:"Classic heavyweight tee. Pressure SA logo front and center.",price:35,sizes:["S","M","L","XL","XXL"],colors:["Black","White"],oos:false,selSize:"M",selColor:"Black"},
+  {id:102,cat:'merch',name:"Pressure SA Snapback",  emoji:"🧢",img:null,desc:"Structured snapback with embroidered gold logo.",             price:40,sizes:["One Size"],colors:["Black","Green"],oos:false,selSize:"One Size",selColor:"Black"},
+  {id:103,cat:'merch',name:"Pressure SA Hoodie",    emoji:"🦺",img:null,desc:"Heavyweight 400gsm pullover hoodie. Stay pressing.",         price:65,sizes:["S","M","L","XL","XXL"],colors:["Black"],oos:false,selSize:"L",selColor:"Black"},
+  {id:104,cat:'merch',name:"Pressure SA Sticker",   emoji:"⭐",img:null,desc:"Die-cut vinyl sticker. Waterproof. Gold & black.",           price:5, sizes:["Standard"],colors:["Gold"],oos:false,selSize:"Standard",selColor:"Gold"},
+];
+
+const WTS=[3.5,7,14,28];
+const WL={3.5:"1/8",7:"1/4",14:"1/2",28:"1oz"};
+const CREDS={admin:"pressure2025",staff:"staff123"};
+let selW={}, selMerchVars={}, cart=[], orders=[], af='all';
+let nextId=200, deliveryMethod='delivery', prevPage='page-store';
+let editingProductId=null, editingProductCat=null;
+
+/* seed demo orders */
+orders.push({id:"PSA-001",name:"Marcus T.",phone:"(210) 555-0192",email:"",contact:"text",address:"4821 Fredericksburg Rd, TX 78201",notes:"Gate 2291",delivery:"delivery",items:[{name:"Runtz",emoji:"🍬",weight:7,qty:1,price:80},{name:"Purple Punch",emoji:"🍇",weight:3.5,qty:1,price:45}],total:125,status:"pending",time:"11:42 AM"});
+orders.push({id:"PSA-002",name:"Destiny R.",phone:"(210) 555-0347",email:"",contact:"telegram",address:"1702 Loop 410 NE, TX 78217",notes:"",delivery:"delivery",items:[{name:"Gelato #33",emoji:"🍨",weight:14,qty:1,price:170}],total:170,status:"out",time:"12:15 PM"});
+orders.push({id:"PSA-003",name:"Kevin L.",phone:"(210) 555-0528",email:"",contact:"text",address:"938 Rigsby Ave, TX 78210",notes:"Apt 4B",delivery:"delivery",items:[{name:"Zkittlez",emoji:"🌸",weight:28,qty:1,price:320}],total:320,status:"delivered",time:"10:30 AM"});
+
+/* ══════════════════════════════════════════
+   AGE GATE
+══════════════════════════════════════════ */
+function passAgeGate(){document.getElementById('age-gate').style.display='none';}
+function denyAgeGate(){document.getElementById('ag-main').style.display='none';document.getElementById('ag-denied').style.display='block';}
+
+/* ══════════════════════════════════════════
+   RENDER FLOWER PRODUCTS
+══════════════════════════════════════════ */
+function renderProducts(){
+  const list=(af==='all'?PRODUCTS.filter(p=>p.cat==='flower'):PRODUCTS.filter(p=>p.cat==='flower'&&p.type===af));
+  const el=document.getElementById('pcnt'); if(el)el.textContent=`(${list.length})`;
+  const grid=document.getElementById('pgrid'); if(!grid)return;
+  grid.innerHTML=list.map(p=>{
+    const w=selW[p.id]||3.5;
+    const imgEl=p.img?`<img src="${p.img}" alt="${p.name}">`:`<span class="emoji-fallback">${p.emoji}</span>`;
+    return`<div class="pcard${p.oos?' out-of-stock':''}">
+      <div class="pimg" onclick="openPDP(${p.id})">
+        <span class="tbadge ${p.type}">${p.type}</span>
+        <span class="trbadge ${p.tier}">${p.tier}</span>
+        ${imgEl}
+        ${p.oos?'<div class="oos-tag">Out of Stock</div>':''}
+      </div>
+      <div class="pbody">
+        <div class="pname" onclick="openPDP(${p.id})">${p.name}</div>
+        <div class="pdesc-short">${p.desc}</div>
+        <div class="wrow">${WTS.map(wt=>`<button class="wbtn ${wt===w?'sel':''}" onclick="pickW(${p.id},${wt})">${WL[wt]}<span class="wp">$${p.prices[wt]}</span></button>`).join('')}</div>
+        <div class="pfoot">
+          <span class="pprice">$${p.prices[w]}</span>
+          <button class="padd" onclick="addCart(${p.id},'flower')" ${p.oos?'disabled':''}>+ Add</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function pickW(pid,w){selW[pid]=w;renderProducts();}
+function filterP(t,el){af=t;document.querySelectorAll('.ftab').forEach(x=>x.classList.remove('active'));if(el)el.classList.add('active');renderProducts();}
+
+/* ══════════════════════════════════════════
+   PRODUCT DETAIL PAGE
+══════════════════════════════════════════ */
+function openPDP(pid){
+  const p=PRODUCTS.find(x=>x.id===pid)||MERCH.find(x=>x.id===pid);
+  if(!p)return;
+  prevPage=document.querySelector('.page.active')?.id||'page-store';
+  const w=selW[p.id]||3.5;
+  const isFlower=p.cat==='flower';
+  const imgEl=p.img?`<img src="${p.img}" alt="${p.name}">`:`<span class="emoji-lg">${p.emoji}</span>`;
+
+  const wRow=isFlower?`
+    <div class="pdp-label">Select Weight</div>
+    <div class="pdp-wrow">
+      ${WTS.map(wt=>`<button class="pdp-wbtn ${wt===w?'sel':''}" onclick="pdpPickW(${p.id},${wt})">${WL[wt]}<span class="pdp-wp">$${p.prices[wt]}</span></button>`).join('')}
+    </div>`:'';
+
+  const varRows=(!isFlower&&p.sizes&&p.sizes.length)?`
+    <div class="pdp-label">Size</div>
+    <div class="pdp-var-row">${p.sizes.map(s=>`<button class="pdp-var-btn ${(selMerchVars[p.id]?.size||p.selSize)===s?'sel':''}" onclick="pdpPickVar(${p.id},'size','${s}')">${s}</button>`).join('')}</div>
+    <div class="pdp-label" style="margin-top:12px">Color</div>
+    <div class="pdp-var-row">${p.colors.map(c=>`<button class="pdp-var-btn ${(selMerchVars[p.id]?.color||p.selColor)===c?'sel':''}" onclick="pdpPickVar(${p.id},'color','${c}')">${c}</button>`).join('')}</div>
+  `:'';
+
+  const price=isFlower?p.prices[w]:p.price;
+  const detailRows=isFlower?`
+    <div class="pdp-details">
+      <h4>Product Details</h4>
+      <div class="pdp-detail-row"><span class="pdp-dk">Type</span><span class="pdp-dv" style="text-transform:capitalize">${p.type}</span></div>
+      <div class="pdp-detail-row"><span class="pdp-dk">Tier</span><span class="pdp-dv" style="text-transform:capitalize">${p.tier}</span></div>
+      <div class="pdp-detail-row"><span class="pdp-dk">Use</span><span class="pdp-dv">Personal / Decorative / Aromatic</span></div>
+      <div class="pdp-detail-row"><span class="pdp-dk">Delivery</span><span class="pdp-dv">Same-day, 24/7</span></div>
+    </div>`:'';
+
+  document.getElementById('pdp-content').innerHTML=`
+    <div>
+      <div class="pdp-img" id="pdp-img-el">${imgEl}</div>
+    </div>
+    <div class="pdp-info">
+      <div class="pdp-badges">
+        <span class="pdp-badge ${p.cat==='merch'?'merch':p.type}">${p.cat==='merch'?'Merch':p.type}</span>
+        ${p.tier?`<span class="pdp-badge tier">${p.tier}</span>`:''}
+        ${p.oos?'<span class="pdp-badge" style="background:rgba(204,34,34,.2);color:#ff7777;border:1px solid rgba(204,34,34,.3)">Out of Stock</span>':''}
+      </div>
+      <div class="pdp-name">${p.name}</div>
+      <div class="pdp-price" id="pdp-price">$${price}</div>
+      <div class="pdp-desc">${p.desc}</div>
+      ${wRow}${varRows}
+      <div class="pdp-label">Quantity</div>
+      <div class="pdp-qty">
+        <button class="qty-btn" onclick="pdpQty(-1)">−</button>
+        <span class="qty-val" id="pdp-qty-val">1</span>
+        <button class="qty-btn" onclick="pdpQty(1)">+</button>
+      </div>
+      <button class="pdp-add" onclick="pdpAddCart(${p.id},'${p.cat}')" ${p.oos?'disabled':''}>
+        ${p.oos?'Out of Stock':'Add to Cart'}
+      </button>
+      <p style="font-size:.72rem;color:var(--muted);text-align:center;margin-top:8px">24/7 delivery · Personal use only</p>
+      ${detailRows}
+    </div>`;
+  goPage('page-pdp');
+}
+
+let pdpQtyVal=1;
+function pdpQty(d){pdpQtyVal=Math.max(1,pdpQtyVal+d);document.getElementById('pdp-qty-val').textContent=pdpQtyVal;}
+function pdpPickW(pid,w){
+  selW[pid]=w;
+  const p=PRODUCTS.find(x=>x.id===pid);
+  document.querySelectorAll('.pdp-wbtn').forEach(b=>b.classList.remove('sel'));
+  event.target.closest('.pdp-wbtn').classList.add('sel');
+  document.getElementById('pdp-price').textContent=`$${p.prices[w]}`;
+}
+function pdpPickVar(pid,key,val){
+  if(!selMerchVars[pid])selMerchVars[pid]={};
+  selMerchVars[pid][key]=val;
+  document.querySelectorAll(`.pdp-var-btn`).forEach(b=>{if(b.textContent===val)b.classList.add('sel');else if(b.getAttribute('onclick')?.includes(`'${key}'`))b.classList.remove('sel');});
+}
+function pdpAddCart(pid,cat){
+  const p=cat==='flower'?PRODUCTS.find(x=>x.id===pid):MERCH.find(x=>x.id===pid);
+  if(!p||p.oos)return;
+  const w=selW[p.id]||3.5;
+  const price=cat==='flower'?p.prices[w]:p.price;
+  const meta=cat==='flower'?WL[w]:`${selMerchVars[p.id]?.size||p.selSize} / ${selMerchVars[p.id]?.color||p.selColor}`;
+  for(let i=0;i<pdpQtyVal;i++){
+    const key=cat==='flower'?`${pid}-${w}`:`${pid}-${meta}`;
+    const ex=cart.find(c=>c.key===key);
+    if(ex)ex.qty++;
+    else cart.push({key,id:pid,name:p.name,emoji:p.emoji,img:p.img,weight:cat==='flower'?w:null,meta,qty:1,price,cat});
+  }
+  pdpQtyVal=1;document.getElementById('pdp-qty-val').textContent='1';
+  updateCount();renderCart();showToast(`${p.name} added`);
+}
+
+/* ══════════════════════════════════════════
+   MERCH
+══════════════════════════════════════════ */
+function renderMerch(){
+  const grid=document.getElementById('merch-grid');if(!grid)return;
+  grid.innerHTML=MERCH.map(p=>{
+    const imgEl=p.img?`<img src="${p.img}" alt="${p.name}">`:`<span class="emoji-fallback">${p.emoji}</span>`;
+    const sv=selMerchVars[p.id]||{size:p.selSize,color:p.selColor};
+    return`<div class="pcard${p.oos?' out-of-stock':''}">
+      <div class="pimg" onclick="openPDP(${p.id})">
+        <span class="tbadge merch">Merch</span>
+        ${imgEl}
+        ${p.oos?'<div class="oos-tag">Sold Out</div>':''}
+      </div>
+      <div class="pbody">
+        <div class="pname" onclick="openPDP(${p.id})">${p.name}</div>
+        ${p.sizes.length>1?`<div class="var-row">${p.sizes.map(s=>`<button class="var-btn ${sv.size===s?'sel':''}" onclick="pickMerchVar(${p.id},'size','${s}',this)">${s}</button>`).join('')}</div>`:''}
+        ${p.colors.length>1?`<div class="var-row">${p.colors.map(c=>`<button class="var-btn ${sv.color===c?'sel':''}" onclick="pickMerchVar(${p.id},'color','${c}',this)">${c}</button>`).join('')}</div>`:''}
+        <div class="pfoot">
+          <span class="pprice">$${p.price}</span>
+          <button class="padd" onclick="addCart(${p.id},'merch')" ${p.oos?'disabled':''}>+ Add</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function pickMerchVar(pid,key,val,btn){
+  if(!selMerchVars[pid])selMerchVars[pid]={};
+  selMerchVars[pid][key]=val;
+  btn.closest('.var-row').querySelectorAll('.var-btn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+}
+
+/* ══════════════════════════════════════════
+   CART
+══════════════════════════════════════════ */
+function addCart(pid,cat){
+  const p=cat==='flower'?PRODUCTS.find(x=>x.id===pid):MERCH.find(x=>x.id===pid);
+  if(!p||p.oos)return;
+  const w=selW[p.id]||3.5;
+  const price=cat==='flower'?p.prices[w]:p.price;
+  const sv=selMerchVars[p.id]||{size:p.selSize,color:p.selColor};
+  const meta=cat==='flower'?WL[w]:`${sv.size} / ${sv.color}`;
+  const key=cat==='flower'?`${pid}-${w}`:`${pid}-${meta}`;
+  const ex=cart.find(c=>c.key===key);
+  if(ex)ex.qty++;
+  else cart.push({key,id:pid,name:p.name,emoji:p.emoji,img:p.img,weight:cat==='flower'?w:null,meta,qty:1,price,cat});
+  updateCount();renderCart();showToast(p.name+' added');
+}
+
+function removeCart(i){cart.splice(i,1);updateCount();renderCart();}
+function updateCount(){
+  const n=cart.reduce((a,b)=>a+b.qty,0);
+  ['cnt','cnt2','cnt-pdp','cnt-merch'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=n;});
+}
+function renderCart(){
+  const body=document.getElementById('cbody'),foot=document.getElementById('cfoot');
+  if(!cart.length){body.innerHTML=`<div class="cd-empty"><div class="cde-icon">🛒</div><p>Cart is empty</p></div>`;foot.innerHTML='';return;}
+  body.innerHTML=cart.map((it,i)=>{
+    const iconEl=it.img?`<img src="${it.img}" alt="${it.name}">`:`<span style="font-size:1.4rem">${it.emoji}</span>`;
+    return`<div class="ci">
+      <div class="ci-icon">${iconEl}</div>
+      <div style="flex:1"><div class="ci-name">${it.name}</div><div class="ci-meta">${it.meta} · Qty: ${it.qty}</div></div>
+      <div class="ci-price">$${it.price*it.qty}</div>
+      <button class="ci-rm" onclick="removeCart(${i})">✕</button>
+    </div>`;
+  }).join('');
+  const total=cart.reduce((a,b)=>a+b.price*b.qty,0);
+  foot.innerHTML=`
+    <div class="cd-total-row"><span class="cd-total-lbl">Total</span><span class="cd-total-val">$${total}</span></div>
+    <button class="cd-checkout" onclick="goCheckout()">Proceed to Checkout →</button>
+    <p style="text-align:center;font-size:.68rem;color:var(--muted);font-family:'Oswald';letter-spacing:.08em;text-transform:uppercase;margin-top:6px">24/7 Delivery · Personal Use Only</p>`;
+}
+function toggleCart(){document.getElementById('covl').classList.toggle('open');document.getElementById('cdrawer').classList.toggle('open');}
+function goCheckout(){toggleCart();renderCoSummary();goPage('page-checkout');}
+
+/* ══════════════════════════════════════════
+   CHECKOUT
+══════════════════════════════════════════ */
+function renderCoSummary(){
+  const total=cart.reduce((a,b)=>a+b.price*b.qty,0);
+  document.getElementById('co-summary').innerHTML=`
+    <div class="sum-title">Order Summary</div>
+    ${cart.map(it=>`<div class="sum-line"><span>${it.name} (${it.meta}) ×${it.qty}</span><span>$${it.price*it.qty}</span></div>`).join('')}
+    <div class="sum-total"><span>Total</span><span style="color:var(--gold)">$${total}</span></div>`;
+}
+function setDelivery(mode,btn){
+  deliveryMethod=mode;
+  document.querySelectorAll('.del-opt').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('delivery-fields').classList.toggle('hidden',mode==='pickup');
+  document.getElementById('pickup-fields').classList.toggle('hidden',mode!=='pickup');
+}
+function placeOrder(){
+  const name=document.getElementById('co-name').value.trim();
+  const phone=document.getElementById('co-phone').value.trim();
+  const age=document.getElementById('co-age').checked;
+  if(!name||!phone){alert('Please fill in all required fields.');return;}
+  if(deliveryMethod==='delivery'){
+    const addr=document.getElementById('co-addr').value.trim();
+    const city=document.getElementById('co-city').value.trim();
+    const zip=document.getElementById('co-zip').value.trim();
+    if(!addr||!city||!zip){alert('Please fill in your delivery address.');return;}
+  }
+  if(!age){alert('Please confirm you are 21 or older.');return;}
+  const total=cart.reduce((a,b)=>a+b.price*b.qty,0);
+  const addr=deliveryMethod==='delivery'?`${document.getElementById('co-addr').value.trim()}, ${document.getElementById('co-city').value.trim()} ${document.getElementById('co-zip').value.trim()}`:'Pickup';
+  const oid='PSA-'+String(orders.length+1).padStart(3,'0');
+  orders.push({id:oid,name,phone,email:document.getElementById('co-email').value,contact:document.getElementById('co-contact').value,address:addr,notes:deliveryMethod==='delivery'?document.getElementById('co-notes').value:'',delivery:deliveryMethod,items:[...cart],total,status:'pending',time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})});
+  document.getElementById('success-order-num').textContent=oid;
+  cart=[];updateCount();renderCart();goPage('page-success');
+}
+
+/* ══════════════════════════════════════════
+   ADMIN
+══════════════════════════════════════════ */
+function doLogin(){
+  const u=document.getElementById('lu').value.trim();
+  const p=document.getElementById('lp').value;
+  const err=document.getElementById('lerr');
+  if(CREDS[u]&&CREDS[u]===p){err.style.display='none';document.getElementById('agreet').textContent=`Welcome, ${u}`;goPage('page-admin');renderAdmin();}
+  else err.style.display='block';
+}
+
+function switchAdmTab(panelId,btn){
+  document.querySelectorAll('.adm-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.adm-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById(panelId).classList.add('active');
+  btn.classList.add('active');
+  if(panelId==='tab-products')renderPMGrid();
+  if(panelId==='tab-merch-admin')renderMerchPMGrid();
+}
+
+function renderAdmin(){
+  const pend=orders.filter(o=>o.status==='pending').length;
+  const out=orders.filter(o=>o.status==='out').length;
+  const done=orders.filter(o=>o.status==='delivered').length;
+  const rev=orders.filter(o=>o.status==='delivered').reduce((a,b)=>a+b.total,0);
+  document.getElementById('astats').innerHTML=`
+    <div class="sc"><div class="sc-num">${pend}</div><div class="sc-lbl">Pending</div></div>
+    <div class="sc"><div class="sc-num">${out}</div><div class="sc-lbl">Out for Delivery</div></div>
+    <div class="sc"><div class="sc-num">${done}</div><div class="sc-lbl">Delivered</div></div>
+    <div class="sc"><div class="sc-num">$${rev}</div><div class="sc-lbl">Revenue Today</div></div>`;
+  const tbody=document.getElementById('atbody');
+  if(!orders.length){tbody.innerHTML=`<tr><td colspan="10" style="text-align:center;color:var(--muted);padding:36px;font-family:'Oswald';letter-spacing:.1em;text-transform:uppercase">No orders yet</td></tr>`;return;}
+  tbody.innerHTML=orders.map((o,i)=>{
+    const sc={pending:'s-pend',out:'s-out',delivered:'s-done'}[o.status];
+    const sl={pending:'Pending',out:'Out for Delivery',delivered:'Delivered'}[o.status];
+    const items=o.items.map(it=>`${it.name}(${it.meta})`).join(', ');
+    const contactIcons={text:'💬',telegram:'✈️',call:'📞'};
+    return`<tr>
+      <td style="color:var(--gold);font-family:'Oswald';font-weight:700">${o.id}</td>
+      <td><strong>${o.name}</strong></td>
+      <td><a href="tel:${o.phone}" style="color:var(--gold);text-decoration:none">${o.phone}</a></td>
+      <td style="color:var(--muted)">${contactIcons[o.contact]||''} ${o.contact}</td>
+      <td style="max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--muted)">${o.address}</td>
+      <td style="max-width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--muted);font-size:.74rem">${items}</td>
+      <td style="color:var(--gold);font-family:'Oswald';font-weight:700">$${o.total}</td>
+      <td><span class="spill ${sc}">${sl}</span></td>
+      <td style="color:var(--muted)">${o.time}</td>
+      <td>
+        <button class="tbtn view" onclick="viewOrder(${i})">View</button>
+        ${o.status==='pending'?`<button class="tbtn disp" onclick="setSt(${i},'out')">Dispatch</button>`:''}
+        ${o.status==='out'?`<button class="tbtn done" onclick="setSt(${i},'delivered')">✓ Done</button>`:''}
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function setSt(i,s){orders[i].status=s;renderAdmin();}
+function viewOrder(i){
+  const o=orders[i];
+  document.getElementById('omc').innerHTML=`
+    <div class="m-head"><div class="m-id">${o.id}</div><button class="cd-close" onclick="closeModal()">Close ✕</button></div>
+    <div class="dr"><span class="dk">Customer</span><span class="dv">${o.name}</span></div>
+    <div class="dr"><span class="dk">Phone</span><span class="dv"><a href="tel:${o.phone}" style="color:var(--gold)">${o.phone}</a></span></div>
+    ${o.email?`<div class="dr"><span class="dk">Email</span><span class="dv">${o.email}</span></div>`:''}
+    <div class="dr"><span class="dk">Contact Via</span><span class="dv">${o.contact}</span></div>
+    <div class="dr"><span class="dk">Delivery</span><span class="dv">${o.delivery}</span></div>
+    <div class="dr"><span class="dk">Address</span><span class="dv">${o.address}</span></div>
+    ${o.notes?`<div class="dr"><span class="dk">Notes</span><span class="dv">${o.notes}</span></div>`:''}
+    <div class="dr"><span class="dk">Time</span><span class="dv">${o.time}</span></div>
+    <div class="dr"><span class="dk">Status</span><span class="dv">${o.status}</span></div>
+    <div style="margin:14px 0 6px;font-family:'Oswald';font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--green2)">Items</div>
+    ${o.items.map(it=>`<div class="dr"><span class="dk">${it.name} (${it.meta}) ×${it.qty}</span><span class="dv" style="color:var(--gold)">$${it.price*it.qty}</span></div>`).join('')}
+    <div class="dr"><span class="dk" style="color:var(--white);font-weight:600">Total</span><span class="dv" style="font-family:'Oswald';font-weight:700;font-size:1.3rem;color:var(--gold)">$${o.total}</span></div>`;
+  document.getElementById('omodal').classList.add('open');
+}
+function closeModal(){document.getElementById('omodal').classList.remove('open');}
+
+/* ── PRODUCT MANAGER ── */
+function renderPMGrid(){
+  const g=document.getElementById('pm-grid');if(!g)return;
+  const products=PRODUCTS.filter(p=>p.cat==='flower');
+  g.innerHTML=products.map(p=>{
+    const imgEl=p.img?`<img src="${p.img}" alt="${p.name}">`:`<span class="emoji-pm">${p.emoji}</span>`;
+    return`<div class="pm-card">
+      <div class="pm-img">${imgEl}</div>
+      <div class="pm-body">
+        <div class="pm-name">${p.name}</div>
+        <div class="pm-meta">${p.type} · ${p.tier} · 1/8: $${p.prices[3.5]} · oz: $${p.prices[28]}</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+          <span class="pm-oos ${p.oos?'out':'in'}">${p.oos?'Out of Stock':'In Stock'}</span>
+          ${p.featured?'<span style="font-size:.6rem;color:var(--gold);font-family:Oswald;letter-spacing:.12em;text-transform:uppercase">★ Featured</span>':''}
+        </div>
+        <div class="pm-actions">
+          <button class="tbtn view" onclick="openProductEditor(${p.id},'flower')">✏️ Edit</button>
+          <button class="tbtn ${p.oos?'disp':'del'}" onclick="toggleOOS(${p.id},'flower')">${p.oos?'✓ Back in Stock':'Mark OOS'}</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderMerchPMGrid(){
+  const g=document.getElementById('pm-merch-grid');if(!g)return;
+  g.innerHTML=MERCH.map(p=>{
+    const imgEl=p.img?`<img src="${p.img}" alt="${p.name}">`:`<span class="emoji-pm">${p.emoji}</span>`;
+    return`<div class="pm-card">
+      <div class="pm-img">${imgEl}</div>
+      <div class="pm-body">
+        <div class="pm-name">${p.name}</div>
+        <div class="pm-meta">$${p.price} · ${p.sizes.join(', ')}</div>
+        <div style="margin-bottom:10px"><span class="pm-oos ${p.oos?'out':'in'}">${p.oos?'Sold Out':'In Stock'}</span></div>
+        <div class="pm-actions">
+          <button class="tbtn view" onclick="openProductEditor(${p.id},'merch')">✏️ Edit</button>
+          <button class="tbtn ${p.oos?'disp':'del'}" onclick="toggleOOS(${p.id},'merch')">${p.oos?'✓ Back in Stock':'Mark OOS'}</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleOOS(id,cat){
+  if(cat==='flower'){const p=PRODUCTS.find(x=>x.id===id);if(p)p.oos=!p.oos;renderPMGrid();}
+  else{const p=MERCH.find(x=>x.id===id);if(p)p.oos=!p.oos;renderMerchPMGrid();}
+  renderProducts();renderMerch();
+  showToast('Stock status updated','gold');
+}
+
+function openProductEditor(id,cat){
+  editingProductId=id;editingProductCat=cat;
+  const isNew=!id;
+  const isFlower=cat==='flower';
+  document.getElementById('pe-title').textContent=isNew?`Add ${isFlower?'Flower':'Merch'} Product`:'Edit Product';
+  document.getElementById('pe-delete-btn').style.display=isNew?'none':'block';
+  document.getElementById('pe-type-row').classList.toggle('hidden',!isFlower);
+  document.getElementById('pe-merch-row').classList.toggle('hidden',isFlower);
+  document.getElementById('pe-price-flower').classList.toggle('hidden',!isFlower);
+  document.getElementById('pe-price-merch').classList.toggle('hidden',isFlower);
+  // reset
+  ['pe-name','pe-emoji','pe-desc','pe-p35','pe-p7','pe-p14','pe-p28','pe-price-single','pe-sizes','pe-colors'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});
+  document.getElementById('pe-oos').checked=false;
+  document.getElementById('pe-featured').checked=false;
+  document.getElementById('pe-img-preview').style.display='none';
+  document.getElementById('pe-img-placeholder').style.display='block';
+
+  if(!isNew){
+    const p=isFlower?PRODUCTS.find(x=>x.id===id):MERCH.find(x=>x.id===id);
+    if(!p)return;
+    document.getElementById('pe-name').value=p.name;
+    document.getElementById('pe-emoji').value=p.emoji;
+    document.getElementById('pe-desc').value=p.desc;
+    if(isFlower){
+      document.getElementById('pe-type').value=p.type;
+      document.getElementById('pe-tier').value=p.tier;
+      document.getElementById('pe-p35').value=p.prices[3.5];
+      document.getElementById('pe-p7').value=p.prices[7];
+      document.getElementById('pe-p14').value=p.prices[14];
+      document.getElementById('pe-p28').value=p.prices[28];
+      document.getElementById('pe-featured').checked=p.featured;
+    } else {
+      document.getElementById('pe-price-single').value=p.price;
+      document.getElementById('pe-sizes').value=p.sizes.join(', ');
+      document.getElementById('pe-colors').value=p.colors.join(', ');
+    }
+    document.getElementById('pe-oos').checked=p.oos;
+    if(p.img){
+      document.getElementById('pe-img-preview').src=p.img;
+      document.getElementById('pe-img-preview').style.display='block';
+      document.getElementById('pe-img-placeholder').style.display='none';
+    }
+  }
+  document.getElementById('pe-overlay').classList.add('open');
+}
+
+function closePE(){document.getElementById('pe-overlay').classList.remove('open');}
+
+function handleImgUpload(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    document.getElementById('pe-img-preview').src=ev.target.result;
+    document.getElementById('pe-img-preview').style.display='block';
+    document.getElementById('pe-img-placeholder').style.display='none';
+  };
+  reader.readAsDataURL(file);
+}
+
+function saveProduct(){
+  const isFlower=editingProductCat==='flower';
+  const name=document.getElementById('pe-name').value.trim();
+  if(!name){alert('Product name is required.');return;}
+  const img=document.getElementById('pe-img-preview').style.display!=='none'?document.getElementById('pe-img-preview').src:null;
+  const oos=document.getElementById('pe-oos').checked;
+  const featured=document.getElementById('pe-featured').checked;
+  const emoji=document.getElementById('pe-emoji').value||'🌿';
+  const desc=document.getElementById('pe-desc').value.trim();
+
+  if(isFlower){
+    const p35=parseFloat(document.getElementById('pe-p35').value)||0;
+    const p7=parseFloat(document.getElementById('pe-p7').value)||0;
+    const p14=parseFloat(document.getElementById('pe-p14').value)||0;
+    const p28=parseFloat(document.getElementById('pe-p28').value)||0;
+    if(editingProductId){
+      const p=PRODUCTS.find(x=>x.id===editingProductId);
+      if(p){Object.assign(p,{name,emoji,img,desc,type:document.getElementById('pe-type').value,tier:document.getElementById('pe-tier').value,prices:{3.5:p35,7:p7,14:p14,28:p28},oos,featured});}
+    } else {
+      PRODUCTS.push({id:nextId++,cat:'flower',name,emoji,img,desc,type:document.getElementById('pe-type').value,tier:document.getElementById('pe-tier').value,prices:{3.5:p35,7:p7,14:p14,28:p28},oos,featured});
+    }
+    renderPMGrid();renderProducts();
+  } else {
+    const price=parseFloat(document.getElementById('pe-price-single').value)||0;
+    const sizes=document.getElementById('pe-sizes').value.split(',').map(s=>s.trim()).filter(Boolean);
+    const colors=document.getElementById('pe-colors').value.split(',').map(c=>c.trim()).filter(Boolean);
+    if(editingProductId){
+      const p=MERCH.find(x=>x.id===editingProductId);
+      if(p){Object.assign(p,{name,emoji,img,desc,price,sizes:sizes.length?sizes:p.sizes,colors:colors.length?colors:p.colors,oos});}
+    } else {
+      MERCH.push({id:nextId++,cat:'merch',name,emoji,img,desc,price,sizes:sizes.length?sizes:['One Size'],colors:colors.length?colors:['Black'],oos,selSize:sizes[0]||'One Size',selColor:colors[0]||'Black'});
+    }
+    renderMerchPMGrid();renderMerch();
+  }
+  closePE();
+  showToast('Product saved!','gold');
+}
+
+function deleteProduct(){
+  if(!editingProductId)return;
+  if(!confirm('Delete this product? This cannot be undone.'))return;
+  if(editingProductCat==='flower'){PRODUCTS=PRODUCTS.filter(p=>p.id!==editingProductId);renderPMGrid();renderProducts();}
+  else{MERCH=MERCH.filter(p=>p.id!==editingProductId);renderMerchPMGrid();renderMerch();}
+  closePE();showToast('Product deleted');
+}
+
+/* ══════════════════════════════════════════
+   UTILS
+══════════════════════════════════════════ */
+function goPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+  ['hamBtn','mobileMenu','hamBtn2','mobileMenu2'].forEach(i=>{const el=document.getElementById(i);if(el)el.classList.remove('open');});
+  if(id==='page-admin')renderAdmin();
+  if(id==='page-merch')renderMerch();
+}
+function goBack(){goPage(prevPage||'page-store');}
+function scrollToShop(){prevPage='page-store';goPage('page-store');setTimeout(()=>document.getElementById('shop').scrollIntoView({behavior:'smooth'}),120);}
+function toggleMenu(){document.getElementById('hamBtn').classList.toggle('open');document.getElementById('mobileMenu').classList.toggle('open');}
+function toggleMenu2(){document.getElementById('hamBtn2')?.classList.toggle('open');document.getElementById('mobileMenu2')?.classList.toggle('open');}
+
+let toastTimer;
+function showToast(msg,style=''){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className='toast'+(style?' '+style:'');
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),2400);
+}
+
+/* ══ INIT ══ */
+renderProducts();renderCart();
+</script>
+</body>
+</html>
