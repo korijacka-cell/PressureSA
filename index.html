@@ -985,24 +985,12 @@ const CAT_GRID={
   merch:{gridId:'merch-grid',cntId:null,emoji:'👕',label:'merch'},
 };
 
-/* ══ DEMO PRODUCT — for checkout & CashApp testing ══ */
-const DEMO={
-  id:9999,category:'flower',name:'DEMO RUNTZ',type:'hybrid',tier:'elite',
-  emoji:'🍬',img_url:null,
-  description:'Test item — add to cart and run a full checkout to test CashApp and delivery flow. Remove from Supabase when going live.',
-  price_eighth:45,price_quarter:80,price_half:150,price_oz:280,
-  price_single:null,out_of_stock:false,featured:true,sort_order:-1,
-  variants:null,sizes:null,colors:null
-};
-
 /* ══ INIT ══ */
 async function initApp(){
   try{
     const {data:{session}}=await sb.auth.getSession();
     currentUser=session?.user||null;
     await Promise.all([loadAllProducts(),loadSettings()]);
-    // Always inject the demo product at the top of flower for testing
-    if(!ALL_PRODUCTS.find(p=>p.id===9999))ALL_PRODUCTS.unshift(DEMO);
     renderAllCategories();
     document.getElementById('app-loader').style.display='none';
     if(!sessionStorage.getItem('age-verified'))document.getElementById('age-gate').classList.add('show');
@@ -1010,8 +998,6 @@ async function initApp(){
     buildCashAppQR();
   }catch(e){
     console.error(e);
-    // On any load error still show the demo so page isn't blank
-    ALL_PRODUCTS=[DEMO];
     renderAllCategories();
     document.getElementById('app-loader').style.display='none';
     if(!sessionStorage.getItem('age-verified'))document.getElementById('age-gate').classList.add('show');
