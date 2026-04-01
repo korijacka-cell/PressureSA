@@ -155,7 +155,7 @@ button{cursor:pointer;}a{text-decoration:none;}
 .tbadge.merch{background:rgba(201,168,64,.88);color:#111;}
 .tbadge.edible{background:rgba(200,60,180,.85);color:#ffd6f7;}
 .tbadge.vape{background:rgba(30,120,200,.85);color:#b8e0ff;}
-.tbadge.wrap{background:rgba(120,80,30,.85);color:#ffe0a0;}
+.tbadge.concentrate{background:rgba(80,60,20,.88);color:#ffd080;}
 .trbadge{position:absolute;top:7px;right:7px;font-family:'Oswald',sans-serif;font-weight:700;font-size:.54rem;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:3px;z-index:2;}
 .trbadge.elite{background:rgba(201,168,64,.9);color:#111;}
 .trbadge.diamond{background:rgba(120,200,240,.9);color:#111;}
@@ -479,6 +479,7 @@ button{cursor:pointer;}a{text-decoration:none;}
       <a onclick="scrollToSection('edibles-section')">Edibles</a>
       <a onclick="scrollToSection('vapes-section')">Vapes</a>
       <a onclick="scrollToSection('wraps-section')">Wraps</a>
+      <a onclick="scrollToSection('concentrates-section')">Concentrates</a>
       <a onclick="goPage('page-merch')">Merch</a>
     </div>
     <button class="nav-cart-btn" onclick="toggleCart()">🛒<span class="cart-count-badge" id="cnt">0</span></button>
@@ -489,6 +490,7 @@ button{cursor:pointer;}a{text-decoration:none;}
       <a onclick="scrollToSection('edibles-section');toggleMenu()">🍬 Edibles</a>
       <a onclick="scrollToSection('vapes-section');toggleMenu()">💨 Nicotine Vapes</a>
       <a onclick="scrollToSection('wraps-section');toggleMenu()">🍂 Wraps & Cigars</a>
+      <a onclick="scrollToSection('concentrates-section');toggleMenu()">🪨 Concentrates</a>
       <a onclick="goPage('page-merch');toggleMenu()">👕 Merch</a>
       <a href="tel:+17262618038">📞 Call / Text</a>
       <div class="mob-phone"><a href="tel:+17262618038">+1 (726) 261-8038</a><br>Text for Telegram · 24/7</div>
@@ -532,8 +534,8 @@ button{cursor:pointer;}a{text-decoration:none;}
       <div class="cat-tile" onclick="goPage('page-merch')">
         <span class="ce">👕</span><div class="cn">Merch</div>
       </div>
-      <div class="cat-tile">
-        <span class="ce">🪨</span><div class="cn">Concentrates</div><span class="cs">Coming Soon</span>
+      <div class="cat-tile" onclick="scrollToSection('concentrates-section')">
+        <span class="ce">🪨</span><div class="cn">Concentrates</div>
       </div>
     </div>
   </div>
@@ -576,6 +578,12 @@ button{cursor:pointer;}a{text-decoration:none;}
     <div class="cat-product-grid" id="wraps-grid"><div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--muted);font-family:'Oswald';letter-spacing:.1em;text-transform:uppercase">Loading...</div></div>
   </div>
 
+  <!-- CONCENTRATES -->
+  <div class="section" id="concentrates-section">
+    <div class="sec-head">🪨 Concentrates <span class="sec-sub" id="ccnt"></span></div>
+    <div class="cat-product-grid" id="concentrates-grid"><div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--muted);font-family:'Oswald';letter-spacing:.1em;text-transform:uppercase">Loading...</div></div>
+  </div>
+
   <footer class="footer">
     <div class="footer-grid">
       <div>
@@ -589,6 +597,7 @@ button{cursor:pointer;}a{text-decoration:none;}
         <a onclick="scrollToSection('edibles-section')">Edibles</a>
         <a onclick="scrollToSection('vapes-section')">Vapes</a>
         <a onclick="scrollToSection('wraps-section')">Wraps</a>
+        <a onclick="scrollToSection('concentrates-section')">Concentrates</a>
         <a onclick="goPage('page-merch')">Merch</a>
       </div>
       <div class="fc">
@@ -784,6 +793,7 @@ button{cursor:pointer;}a{text-decoration:none;}
       <button class="adm-tab" onclick="switchTab('tab-edibles',this)">🍬 Edibles</button>
       <button class="adm-tab" onclick="switchTab('tab-vapes',this)">💨 Vapes</button>
       <button class="adm-tab" onclick="switchTab('tab-wraps',this)">🍂 Wraps</button>
+      <button class="adm-tab" onclick="switchTab('tab-concentrates',this)">🪨 Concentrates</button>
       <button class="adm-tab" onclick="switchTab('tab-merch-admin',this)">👕 Merch</button>
       <button class="adm-tab" onclick="switchTab('tab-settings',this)">⚙️ Settings</button>
     </div>
@@ -838,6 +848,15 @@ button{cursor:pointer;}a{text-decoration:none;}
           <button class="btn-g" onclick="openEditor(null,'wrap')" style="font-size:.75rem;padding:8px 16px">+ Add Wrap</button>
         </div>
         <div class="pm-grid" id="pm-wraps"></div>
+      </div>
+
+      <!-- CONCENTRATES -->
+      <div class="adm-panel" id="tab-concentrates">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+          <div class="adm-sec" style="margin-bottom:0">Concentrates</div>
+          <button class="btn-g" onclick="openEditor(null,'concentrate')" style="font-size:.75rem;padding:8px 16px">+ Add Concentrate</button>
+        </div>
+        <div class="pm-grid" id="pm-concentrates"></div>
       </div>
 
       <!-- MERCH -->
@@ -999,6 +1018,7 @@ const CAT_GRID={
   edible:{gridId:'edibles-grid',cntId:'ecnt',emoji:'🍬',label:'edible'},
   vape:{gridId:'vapes-grid',cntId:'vcnt',emoji:'💨',label:'vape'},
   wrap:{gridId:'wraps-grid',cntId:'wcnt',emoji:'🍂',label:'wrap'},
+  concentrate:{gridId:'concentrates-grid',cntId:'ccnt',emoji:'🪨',label:'concentrate'},
   merch:{gridId:'merch-grid',cntId:null,emoji:'👕',label:'merch'},
 };
 
@@ -1061,11 +1081,13 @@ function renderAllCategories(){
   renderCatGrid('edible');
   renderCatGrid('vape');
   renderCatGrid('wrap');
+  renderCatGrid('concentrate');
   renderMerch();
 }
 
 function getPrice(p,w){
-  if(p.category==='flower')return w===3.5?p.price_eighth:w===7?p.price_quarter:w===14?p.price_half:p.price_oz;
+  if(p.category==='flower'||p.category==='concentrate')
+    return w===3.5?p.price_eighth:w===7?p.price_quarter:w===14?p.price_half:p.price_oz;
   return p.price_single||0;
 }
 
@@ -1088,7 +1110,12 @@ function renderCatGrid(cat){
 function buildProductCards(list,cat){
   if(!list.length)return`<div style="grid-column:1/-1;text-align:center;padding:28px;color:var(--muted);font-family:'Oswald';letter-spacing:.1em;text-transform:uppercase">No products found</div>`;
   const isFlower=cat==='flower';
+  const isConcentrate=cat==='concentrate';
+  const isWeightBased=isFlower||isConcentrate;
   const isMerch=cat==='merch';
+  const WL_CON={3.5:'3.5g',7:'7g',14:'14g',28:'14g'}; // concentrates: 1g,3.5g,7g,14g mapped to same DB fields
+  const CON_WTS=[3.5,7,14,28]; // reuse same DB columns; labels differ
+  const CON_WL={3.5:'1g',7:'3.5g',14:'7g',28:'14g'};
   return list.map(p=>{
     const w=selW[p.id]||3.5;
     const price=getPrice(p,w);
@@ -1099,7 +1126,7 @@ function buildProductCards(list,cat){
     const variantsField=p.variants?p.variants.split(',').map(v=>v.trim()).filter(Boolean):[];
     const selVariant=selVars[p.id]?.variant||variantsField[0]||'';
 
-    const wRow=isFlower?`<div class="wrow">${[3.5,7,14,28].map(wt=>`<button class="wbtn ${wt===w?'sel':''}" onclick="pickW(${p.id},${wt})">${WL[wt]}<span class="wp">$${getPrice(p,wt)}</span></button>`).join('')}</div>`:'';
+    const wRow=isFlower?`<div class="wrow">${[3.5,7,14,28].map(wt=>`<button class="wbtn ${wt===w?'sel':''}" onclick="pickW(${p.id},${wt})">${WL[wt]}<span class="wp">$${getPrice(p,wt)}</span></button>`).join('')}</div>`:isConcentrate?`<div class="wrow">${[3.5,7,14,28].map(wt=>`<button class="wbtn ${wt===w?'sel':''}" onclick="pickW(${p.id},${wt})">${CON_WL[wt]}<span class="wp">$${getPrice(p,wt)}</span></button>`).join('')}</div>`:'';
 
     const sizeRow=isMerch&&variants.length>1?`<div class="var-row">${variants.map(s=>`<button class="var-btn ${sv.size===s?'sel':''}" onclick="pickVar(${p.id},'size','${s}',this)">${s}</button>`).join('')}</div>`:'';
     const colorRow=isMerch&&colors.length>1?`<div class="var-row">${colors.map(c=>`<button class="var-btn ${sv.color===c?'sel':''}" onclick="pickVar(${p.id},'color','${c}',this)">${c}</button>`).join('')}</div>`:'';
@@ -1133,7 +1160,12 @@ function renderMerch(){
   grid.innerHTML=buildProductCards(list,'merch');
 }
 
-function pickW(pid,w){selW[pid]=w;renderCatGrid('flower');}
+function pickW(pid,w){
+  selW[pid]=w;
+  const p=ALL_PRODUCTS.find(x=>x.id===pid);
+  if(p?.category==='concentrate') renderCatGrid('concentrate');
+  else renderCatGrid('flower');
+}
 function pickVar(pid,key,val,btn){
   if(!selVars[pid])selVars[pid]={};
   selVars[pid][key]=val;
@@ -1146,7 +1178,13 @@ function filterP(t,el){af=t;document.querySelectorAll('.ftab').forEach(x=>x.clas
 function openPDP(pid){
   const p=ALL_PRODUCTS.find(x=>x.id===pid);if(!p)return;
   prevPage=document.querySelector('.page.active')?.id||'page-store';
-  const cat=p.category;const isFlower=cat==='flower';const isMerch=cat==='merch';
+  const cat=p.category;
+  const isFlower=cat==='flower';
+  const isConcentrate=cat==='concentrate';
+  const isWeightBased=isFlower||isConcentrate;
+  const isMerch=cat==='merch';
+  const CON_WL={3.5:'1g',7:'3.5g',14:'7g',28:'14g'};
+  const wLabels=isConcentrate?CON_WL:WL;
   const w=selW[p.id]||3.5;
   const price=getPrice(p,w);
   const imgEl=p.img_url?`<img src="${p.img_url}" alt="${p.name}">`:`<span style="font-size:6rem;position:relative;z-index:1">${p.emoji||'🌿'}</span>`;
@@ -1156,7 +1194,7 @@ function openPDP(pid){
   const flavorVars=p.variants?p.variants.split(',').map(v=>v.trim()).filter(Boolean):[];
   const selFlavor=selVars[p.id]?.variant||flavorVars[0]||'';
 
-  const wRow=isFlower?`<div class="pdp-label">Select Weight</div><div class="pdp-wrow">${[3.5,7,14,28].map(wt=>`<button class="pdp-wbtn ${wt===w?'sel':''}" onclick="pdpPickW(${p.id},${wt},${JSON.stringify({3.5:p.price_eighth,7:p.price_quarter,14:p.price_half,28:p.price_oz})})">${WL[wt]}<span class="pdp-wp">$${getPrice(p,wt)}</span></button>`).join('')}</div>`:'';
+  const wRow=isWeightBased?`<div class="pdp-label">Select ${isConcentrate?'Size':'Weight'}</div><div class="pdp-wrow">${[3.5,7,14,28].map(wt=>`<button class="pdp-wbtn ${wt===w?'sel':''}" onclick="pdpPickW(${p.id},${wt},${JSON.stringify({3.5:p.price_eighth,7:p.price_quarter,14:p.price_half,28:p.price_oz})})">${wLabels[wt]}<span class="pdp-wp">$${getPrice(p,wt)}</span></button>`).join('')}</div>`:'';
 
   const sizeRow=isMerch&&variants.length?`<div class="pdp-label">Size</div><div class="pdp-var-row">${variants.map(s=>`<button class="pdp-var-btn ${sv.size===s?'sel':''}" onclick="pdpPickVar(${p.id},'size','${s}')">${s}</button>`).join('')}</div>`:'';
   const colorRow=isMerch&&colors.length?`<div class="pdp-label" style="margin-top:10px">Color</div><div class="pdp-var-row">${colors.map(c=>`<button class="pdp-var-btn ${sv.color===c?'sel':''}" onclick="pdpPickVar(${p.id},'color','${c}')">${c}</button>`).join('')}</div>`:'';
@@ -1441,6 +1479,7 @@ function renderAllPMGrids(){
   renderPMGrid('edible','pm-edibles');
   renderPMGrid('vape','pm-vapes');
   renderPMGrid('wrap','pm-wraps');
+  renderPMGrid('concentrate','pm-concentrates');
   renderPMGrid('merch','pm-merch');
 }
 
@@ -1476,21 +1515,35 @@ async function quickToggleOOS(id,cat){
   renderAllCategories();
   showToast('Stock status updated','gold');
 }
-function catToGridKey(cat){return{flower:'flower',edible:'edibles',vape:'vapes',wrap:'wraps',merch:'merch'}[cat]||cat;}
+function catToGridKey(cat){return{flower:'flower',edible:'edibles',vape:'vapes',wrap:'wraps',concentrate:'concentrates',merch:'merch'}[cat]||cat;}
 
 /* ══ PRODUCT EDITOR ══ */
 function openEditor(id,cat){
   editId=id;editCat=cat;pendingImgFile=null;
-  const isNew=!id;const isFlower=cat==='flower';const isMerch=cat==='merch';
+  const isNew=!id;
+  const isFlower=cat==='flower';
+  const isConcentrate=cat==='concentrate';
+  const isWeightBased=isFlower||isConcentrate;
+  const isMerch=cat==='merch';
   const isVariant=cat==='vape'||cat==='wrap'||cat==='edible';
   document.getElementById('pe-title').textContent=isNew?`Add ${cat.charAt(0).toUpperCase()+cat.slice(1)}`:'Edit Product';
   document.getElementById('pe-del-btn').style.display=isNew?'none':'block';
   document.getElementById('pe-flower-fields').classList.toggle('hidden',!isFlower);
   document.getElementById('pe-merch-fields').classList.toggle('hidden',!isMerch);
   document.getElementById('pe-variant-fields').classList.toggle('hidden',!isVariant);
-  document.getElementById('pe-weight-prices').classList.toggle('hidden',!isFlower);
-  document.getElementById('pe-single-price').classList.toggle('hidden',isFlower);
+  document.getElementById('pe-weight-prices').classList.toggle('hidden',!isWeightBased);
+  document.getElementById('pe-single-price').classList.toggle('hidden',isWeightBased);
   document.getElementById('pe-feat-row').classList.toggle('hidden',!isFlower);
+  // Update weight labels for concentrates (grams instead of oz)
+  if(isConcentrate){
+    const labels=document.querySelectorAll('#pe-weight-prices .fl');
+    const gl=['1g ($)','3.5g ($)','7g ($)','14g ($)'];
+    labels.forEach((l,i)=>{if(gl[i])l.textContent=gl[i];});
+  } else if(isFlower){
+    const labels=document.querySelectorAll('#pe-weight-prices .fl');
+    const fl=['1/8 oz','1/4 oz','1/2 oz','1 oz'];
+    labels.forEach((l,i)=>{if(fl[i])l.textContent=fl[i];});
+  }
   // Reset
   ['pe-name','pe-emoji','pe-desc','pe-p35','pe-p7','pe-p14','pe-p28','pe-price','pe-sizes','pe-colors','pe-variants'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});
   document.getElementById('pe-oos').checked=false;
@@ -1513,6 +1566,11 @@ function openEditor(id,cat){
       document.getElementById('pe-p14').value=p.price_half||'';
       document.getElementById('pe-p28').value=p.price_oz||'';
       const feat=document.getElementById('pe-featured');if(feat)feat.checked=p.featured||false;
+    }else if(isConcentrate){
+      document.getElementById('pe-p35').value=p.price_eighth||'';
+      document.getElementById('pe-p7').value=p.price_quarter||'';
+      document.getElementById('pe-p14').value=p.price_half||'';
+      document.getElementById('pe-p28').value=p.price_oz||'';
     }else if(isMerch){
       document.getElementById('pe-price').value=p.price_single||'';
       document.getElementById('pe-sizes').value=p.sizes||'';
@@ -1544,7 +1602,10 @@ async function saveProduct(){
   const name=document.getElementById('pe-name').value.trim();
   if(!name){showToast('Name is required.','err');return;}
   showSaving('Saving product...');
-  const isFlower=editCat==='flower';const isMerch=editCat==='merch';
+  const isFlower=editCat==='flower';
+  const isConcentrate=editCat==='concentrate';
+  const isWeightBased=isFlower||isConcentrate;
+  const isMerch=editCat==='merch';
   let img_url=null;
   if(pendingImgFile){
     const ext=pendingImgFile.name.split('.').pop();
@@ -1558,18 +1619,20 @@ async function saveProduct(){
   }
   const payload={
     name,category:editCat,
-    emoji:document.getElementById('pe-emoji').value||(isFlower?'🌿':'📦'),
+    emoji:document.getElementById('pe-emoji').value||(isFlower?'🌿':isConcentrate?'🪨':'📦'),
     description:document.getElementById('pe-desc').value.trim(),
     out_of_stock:document.getElementById('pe-oos').checked,
     ...(img_url!==null&&{img_url}),
-    ...(isFlower?{
-      type:document.getElementById('pe-type').value,
-      tier:document.getElementById('pe-tier').value,
+    ...(isWeightBased?{
       price_eighth:parseFloat(document.getElementById('pe-p35').value)||0,
       price_quarter:parseFloat(document.getElementById('pe-p7').value)||0,
       price_half:parseFloat(document.getElementById('pe-p14').value)||0,
       price_oz:parseFloat(document.getElementById('pe-p28').value)||0,
-      featured:document.getElementById('pe-featured').checked,
+      ...(isFlower&&{
+        type:document.getElementById('pe-type').value,
+        tier:document.getElementById('pe-tier').value,
+        featured:document.getElementById('pe-featured').checked,
+      }),
     }:isMerch?{
       price_single:parseFloat(document.getElementById('pe-price').value)||0,
       sizes:document.getElementById('pe-sizes').value.trim(),
@@ -1790,6 +1853,7 @@ function switchTab(panelId,btn){
   if(panelId==='tab-edibles')renderPMGrid('edible','pm-edibles');
   if(panelId==='tab-vapes')renderPMGrid('vape','pm-vapes');
   if(panelId==='tab-wraps')renderPMGrid('wrap','pm-wraps');
+  if(panelId==='tab-concentrates')renderPMGrid('concentrate','pm-concentrates');
   if(panelId==='tab-merch-admin')renderPMGrid('merch','pm-merch');
   if(panelId==='tab-settings')loadSettingsIntoForm();
 }
