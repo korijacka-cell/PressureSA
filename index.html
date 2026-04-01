@@ -1300,7 +1300,11 @@ async function placeOrder(){
   const{error}=await sb.from('orders').insert(orderPayload);
 
   btn.disabled=false; btn.textContent='Place Order — 24/7 Delivery';
-  if(error){console.error(error);showToast('Error placing order. Try again.','err');return;}
+  if(error){
+    console.error('Supabase order error:', error);
+    showToast('Error: ' + (error.message||error.code||JSON.stringify(error)), 'err');
+    return;
+  }
 
   // Capture everything needed for SMS BEFORE clearing cart/navigating
   const cartSnapshot = cart.map(it=>({name:it.name,meta:it.meta,qty:it.qty,price:it.price}));
