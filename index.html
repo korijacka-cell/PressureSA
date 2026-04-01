@@ -678,7 +678,7 @@ button{cursor:pointer;}a{text-decoration:none;}
       <div class="fg"><label class="fl">Full Name *</label><input class="fi" id="co-name" placeholder="First Last"></div>
       <div class="f2">
         <div class="fg"><label class="fl">Phone *</label><input class="fi" id="co-phone" placeholder="(210) 555-0000" type="tel"></div>
-        <div class="fg"><label class="fl">Email (optional)</label><input class="fi" id="co-email" placeholder="you@email.com" type="email"></div>
+        <div class="fg"><label class="fl">Email *</label><input class="fi" id="co-email" placeholder="you@email.com" type="email" required></div>
       </div>
       <div class="fg">
         <label class="fl">Preferred Contact</label>
@@ -1265,7 +1265,9 @@ async function placeOrder(){
   const name=document.getElementById('co-name').value.trim();
   const phone=document.getElementById('co-phone').value.trim();
   const age=document.getElementById('co-age').checked;
-  if(!name||!phone){showToast('Please fill in all required fields.','err');return;}
+  const email=document.getElementById('co-email').value.trim();
+  if(!name||!phone||!email){showToast('Please fill in all required fields.','err');return;}
+  if(!email.includes('@')){showToast('Please enter a valid email address.','err');return;}
   if(deliveryMethod==='delivery'){
     const addr=document.getElementById('co-addr').value.trim();
     const city=document.getElementById('co-city').value.trim();
@@ -1286,7 +1288,7 @@ async function placeOrder(){
     order_number: orderNum,
     customer_name: name,
     phone,
-    email: document.getElementById('co-email').value||null,
+    email: email||null,
     contact_method: document.getElementById('co-contact').value,
     delivery_method: deliveryMethod,
     address: addr,
@@ -1315,6 +1317,7 @@ async function placeOrder(){
     order_number: orderNum,
     customer_name: name,
     phone,
+    email,
     payment_method: paymentMethod,
     address: addr,
     delivery_notes: notesVal,
