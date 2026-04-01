@@ -1271,38 +1271,60 @@ async function placeOrder(){
     if(!addr||!city||!zip){showToast('Please enter your delivery address.','err');return;}
   }
   if(!age){showToast('Please confirm you are 21 or older.','err');return;}
-  const btn=document.getElementById('place-btn');btn.disabled=true;btn.textContent='Placing Order...';
+  const btn=document.getElementById('place-btn');
+  btn.disabled=true; btn.textContent='Placing Order...';
+
   const total=cart.reduce((a,b)=>a+b.price*b.qty,0);
-  const addr=deliveryMethod==='delivery'?`${document.getElementById('co-addr').value.trim()}, ${document.getElementById('co-city').value.trim()} ${document.getElementById('co-zip').value.trim()}`:'Pickup';
+  const addr=deliveryMethod==='delivery'
+    ?`${document.getElementById('co-addr').value.trim()}, ${document.getElementById('co-city').value.trim()} ${document.getElementById('co-zip').value.trim()}`
+    :'Pickup';
   const orderNum='PSA-'+Date.now().toString().slice(-6);
-  const{error}=await sb.from('orders').insert({
-    order_number:orderNum,customer_name:name,phone,
-    email:document.getElementById('co-email').value||null,
-    contact_method:document.getElementById('co-contact').value,
-    delivery_method:deliveryMethod,
-    payment_method:paymentMethod,
-    address:addr,
-    delivery_notes:deliveryMethod==='delivery'?document.getElementById('co-notes').value:null,
-    items:cart.map(it=>({name:it.name,meta:it.meta,qty:it.qty,price:it.price})),
-    total,status:'pending'
-  });
-  btn.disabled=false;btn.textContent='Place Order — 24/7 Delivery';
-  if(error){console.error(error);showToast('Error placing order. Try again.','err');return;}
-  document.getElementById('success-order-num').textContent=orderNum;
-  const cashNote=document.getElementById('success-cashapp-note');
-  if(cashNote)cashNote.style.display=paymentMethod==='cashapp'?'block':'none';
-  cart=[];updateCount();renderCart();goPage('page-success');
-  // Fire SMS notifications after page transition (non-blocking)
-  const newOrder={
-    order_number:orderNum, customer_name:name, phone,
-    payment_method:paymentMethod, address:addr,
-    delivery_notes:deliveryMethod==='delivery'?document.getElementById('co-notes').value:'',
-    items:cart, total
+
+  const orderPayload={
+    order_number: orderNum,
+    customer_name: name,
+    phone,
+    email: document.getElementById('co-email').value||null,
+    contact_method: document.getElementById('co-contact').value,
+    delivery_method: deliveryMethod,
+    address: addr,
+    delivery_notes: deliveryMethod==='delivery' ? document.getElementById('co-notes').value : null,
+    items: cart.map(it=>({name:it.name,meta:it.meta,qty:it.qty,price:it.price})),
+    total,
+    status: 'pending'
   };
-  // Notify owner immediately
+
+  // Only include payment_method if column exists (safe insert)
+  try{ orderPayload.payment_method = paymentMethod; }catch(e){}
+
+  const{error}=await sb.from('orders').insert(orderPayload);
+
+  btn.disabled=false; btn.textContent='Place Order — 24/7 Delivery';
+  if(error){console.error(error);showToast('Error placing order. Try again.','err');return;}
+
+  // Capture everything needed for SMS BEFORE clearing cart/navigating
+  const cartSnapshot = cart.map(it=>({name:it.name,meta:it.meta,qty:it.qty,price:it.price}));
+  const notesVal = deliveryMethod==='delivery' ? (document.getElementById('co-notes').value||'') : '';
+  const newOrder = {
+    order_number: orderNum,
+    customer_name: name,
+    phone,
+    payment_method: paymentMethod,
+    address: addr,
+    delivery_notes: notesVal,
+    items: cartSnapshot,
+    total
+  };
+
+  // Navigate to success
+  document.getElementById('success-order-num').textContent = orderNum;
+  const cashNote = document.getElementById('success-cashapp-note');
+  if(cashNote) cashNote.style.display = paymentMethod==='cashapp' ? 'block' : 'none';
+  cart = []; updateCount(); renderCart(); goPage('page-success');
+
+  // Fire SMS non-blocking after navigation
   notifyOwner(newOrder).catch(e=>console.warn('Owner SMS failed:',e));
-  // Notify customer — confirmed
-  notifyCustomer({...newOrder, phone}, 'pending').catch(e=>console.warn('Customer SMS failed:',e));
+  notifyCustomer(newOrder, 'pending').catch(e=>console.warn('Customer SMS failed:',e));
 }
 
 /* ══ ADMIN AUTH ══ */
