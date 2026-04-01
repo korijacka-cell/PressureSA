@@ -1618,44 +1618,43 @@ function initEmailJS(){
 
 /* ══ SEND OWNER ALERT EMAIL ══ */
 async function emailOwner(order){
-  if(!ejsReady) return;
+  if(!ejsReady){ console.warn('EmailJS not ready'); return; }
   const items = (order.items||[]).map(it=>`${it.name}${it.meta?' ('+it.meta+')':''} x${it.qty} — $${it.price*it.qty}`).join('\n');
   try{
-    await emailjs.send(EJS.serviceId, EJS.ownerTemplate, {
+    const result = await emailjs.send(EJS.serviceId, EJS.ownerTemplate, {
       order_number:  order.order_number,
       customer_name: order.customer_name,
       phone:         order.phone,
       items,
-      total:         order.total,
+      total:         String(order.total),
       payment:       order.payment_method==='cashapp' ? 'CashApp $9bigs' : 'Cash on Delivery',
       address:       order.address || 'Pickup',
       notes:         order.delivery_notes || '—',
       to_email:      EJS.ownerEmail,
+      reply_to:      EJS.ownerEmail,
     });
-  }catch(e){ console.warn('Owner email failed:', e); }
+    console.log('Owner email sent:', result.status, result.text);
+  }catch(e){
+    console.error('Owner email FAILED:', e);
+    showToast('Email alert failed: ' + (e.text||e.message||'unknown'), 'err');
+  }
 }
 
 /* ══ SEND CUSTOMER CONFIRMATION EMAIL ══ */
 async function emailCustomer(order){
-  if(!ejsReady || !order.email) return;
-  // Build orders array matching template: {{#orders}} {{name}} {{units}} {{price}} {{/orders}}
-  const ordersArr = (order.items||[]).map(it=>({
-    name:  it.name + (it.meta ? ` (${it.meta})` : ''),
-    units: it.qty,
-    price: (it.price * it.qty).toFixed(2)
-  }));
+  if(!ejsReady || !order.email){ console.warn('EmailJS not ready or no customer email'); return; }
   try{
-    await emailjs.send(EJS.serviceId, EJS.customerTemplate, {
-      order_id:      order.order_number,
-      orders:        ordersArr,          // EmailJS passes arrays to Mustache loops
-      'cost.shipping': '0.00',
-      'cost.tax':      '0.00',
-      'cost.total':    order.total.toFixed(2),
-      email:           order.email,
-      customer_name:   order.customer_name,
-      to_email:        order.email,
+    const result = await emailjs.send(EJS.serviceId, EJS.customerTemplate, {
+      customer_name: order.customer_name,
+      order_number:  order.order_number,
+      total:         String(order.total),
+      to_email:      order.email,
+      reply_to:      EJS.ownerEmail,
     });
-  }catch(e){ console.warn('Customer email failed:', e); }
+    console.log('Customer email sent:', result.status, result.text);
+  }catch(e){
+    console.error('Customer email FAILED:', e);
+  }
 }
 
 /* ══ SMS NOTIFICATIONS (Twilio) ══ */
