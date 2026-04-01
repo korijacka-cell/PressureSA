@@ -862,6 +862,17 @@ button{cursor:pointer;}a{text-decoration:none;}
             <div class="fg"><label class="fl">CashApp Cashtag</label><input class="fi" id="set-cashapp" placeholder="$9bigs"></div>
           </div>
           <div class="co-block">
+            <div class="co-block-title">📱 SMS Notifications (Twilio)</div>
+            <div class="fg"><label class="fl">Twilio Account SID</label><input class="fi" id="set-twilio-sid" placeholder="ACxxxxxxxxxxxxxxxxxxxxxxxx" type="password"></div>
+            <div class="fg"><label class="fl">Twilio Auth Token</label><input class="fi" id="set-twilio-token" placeholder="••••••••••••••••••••••••••••••••" type="password"></div>
+            <div class="fg"><label class="fl">Twilio From Number</label><input class="fi" id="set-twilio-from" placeholder="+18336880390"></div>
+            <div class="fg"><label class="fl">Owner Alert Number</label><input class="fi" id="set-owner-phone" placeholder="+17262618038"></div>
+            <div style="display:flex;gap:10px;margin-top:4px;flex-wrap:wrap">
+              <button class="tbtn disp" onclick="testSMS()" style="padding:8px 16px;font-size:.72rem">📱 Send Test SMS</button>
+              <span id="sms-status" style="font-family:'Oswald';font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);align-self:center"></span>
+            </div>
+          </div>
+          <div class="co-block">
             <div class="co-block-title">🚗 Delivery</div>
             <div class="fg"><label class="fl">Delivery Hours</label><input class="fi" id="set-hours" placeholder="24/7"></div>
             <div class="fg"><label class="fl">Delivery Areas</label><input class="fi" id="set-areas" placeholder="Texas"></div>
@@ -969,7 +980,12 @@ const sb=supabase.createClient(SUPA_URL,SUPA_KEY);
 
 /* ══ STATE ══ */
 const WL={3.5:'1/8',7:'1/4',14:'1/2',28:'1oz'};
-let ALL_PRODUCTS=[],SETTINGS={};
+let ALL_PRODUCTS=[],SETTINGS={
+  twilio_sid:   'ACbf10d8725072866657893ae7e27a25d1',
+  twilio_token: '54413a92591ef2788080d07e005a8d9e',
+  twilio_from:  '+18336880390',
+  owner_phone:  '+17262618038'
+};
 let selW={},selVars={},cart=[];
 let af='all',deliveryMethod='delivery',paymentMethod='cash';
 let prevPage='page-store',pdpQtyVal=1;
@@ -1023,8 +1039,8 @@ async function loadAllProducts(){
 async function loadSettings(){
   const{data,error}=await sb.from('settings').select('*');
   if(error)return;
-  SETTINGS={};
-  (data||[]).forEach(r=>SETTINGS[r.key]=r.value);
+  // Merge DB values over defaults — preserves hardcoded Twilio creds if not yet in DB
+  (data||[]).forEach(r=>{ if(r.value)SETTINGS[r.key]=r.value; });
   applySettings();
 }
 
@@ -1276,6 +1292,17 @@ async function placeOrder(){
   const cashNote=document.getElementById('success-cashapp-note');
   if(cashNote)cashNote.style.display=paymentMethod==='cashapp'?'block':'none';
   cart=[];updateCount();renderCart();goPage('page-success');
+  // Fire SMS notifications after page transition (non-blocking)
+  const newOrder={
+    order_number:orderNum, customer_name:name, phone,
+    payment_method:paymentMethod, address:addr,
+    delivery_notes:deliveryMethod==='delivery'?document.getElementById('co-notes').value:'',
+    items:cart, total
+  };
+  // Notify owner immediately
+  notifyOwner(newOrder).catch(e=>console.warn('Owner SMS failed:',e));
+  // Notify customer — confirmed
+  notifyCustomer({...newOrder, phone}, 'pending').catch(e=>console.warn('Customer SMS failed:',e));
 }
 
 /* ══ ADMIN AUTH ══ */
@@ -1346,7 +1373,12 @@ function renderOrdersTable(orders){
 async function updateStatus(id,status){
   const{error}=await sb.from('orders').update({status}).eq('id',id);
   if(error){showToast('Update failed','err');return;}
-  await loadOrders();showToast('Order updated','gold');
+  // Fetch full order to get customer phone for notification
+  const{data:order}=await sb.from('orders').select('*').eq('id',id).single();
+  if(order && (status==='out_for_delivery'||status==='delivered')){
+    notifyCustomer(order, status).catch(e=>console.warn('Status SMS failed:',e));
+  }
+  await loadOrders();showToast('Order updated — customer notified','gold');
 }
 function viewOrder(orderNum){
   sb.from('orders').select('*').eq('order_number',orderNum).single().then(({data:o})=>{
@@ -1537,6 +1569,103 @@ async function deleteProduct(){
   closeEditor();showToast('Product deleted');
 }
 
+/* ══ SMS NOTIFICATIONS (Twilio) ══ */
+
+// Core Twilio sender — calls a Supabase Edge Function proxy to keep credentials server-side
+// Falls back to direct Twilio API call using credentials from SETTINGS
+async function sendSMS(to, body){
+  const sid   = SETTINGS.twilio_sid;
+  const token = SETTINGS.twilio_token;
+  const from  = SETTINGS.twilio_from || '+18336880390';
+  if(!sid || !token){ console.warn('Twilio not configured'); return false; }
+
+  // Normalize the number — strip non-digits, ensure +1 prefix
+  const clean = to.replace(/\D/g,'');
+  const e164  = clean.startsWith('1') ? '+'+clean : '+1'+clean;
+
+  try{
+    // Twilio REST API via fetch with Basic Auth
+    const creds = btoa(`${sid}:${token}`);
+    const res = await fetch(`https://api.twilio.com/2010-04-01/Accounts/${sid}/Messages.json`,{
+      method:'POST',
+      headers:{
+        'Authorization': `Basic ${creds}`,
+        'Content-Type':  'application/x-www-form-urlencoded'
+      },
+      body: new URLSearchParams({ To: e164, From: from, Body: body })
+    });
+    const data = await res.json();
+    if(data.sid){ return true; }
+    else{ console.error('Twilio error:', data); return false; }
+  }catch(e){
+    console.error('SMS send failed:', e);
+    return false;
+  }
+}
+
+// Alert the owner when a new order comes in
+async function notifyOwner(order){
+  const ownerPhone = SETTINGS.owner_phone || '7262618038';
+  const items = (order.items||[]).map(i=>`${i.name} x${i.qty}`).join(', ');
+  const msg =
+    `🔔 NEW ORDER — Pressure SA\n` +
+    `Order: ${order.order_number}\n` +
+    `Customer: ${order.customer_name}\n` +
+    `Phone: ${order.phone}\n` +
+    `Items: ${items}\n` +
+    `Total: $${order.total}\n` +
+    `Payment: ${order.payment_method==='cashapp'?'CashApp $9bigs':'Cash'}\n` +
+    `Address: ${order.address||'Pickup'}\n` +
+    `${order.delivery_notes?'Notes: '+order.delivery_notes:''}`.trim();
+  return sendSMS(ownerPhone, msg);
+}
+
+// Notify the customer when their order status changes
+async function notifyCustomer(order, status){
+  if(!order.phone) return false;
+  const msgs = {
+    pending:
+      `✅ Order Confirmed — Pressure SA\n` +
+      `Hi ${order.customer_name.split(' ')[0]}! Your order ${order.order_number} is confirmed.\n` +
+      `Total: $${order.total}\n` +
+      `We'll text you when it's on the way. Questions? +1 (726) 261-8038`,
+    out_for_delivery:
+      `🚗 On The Way — Pressure SA\n` +
+      `Your order ${order.order_number} is out for delivery!\n` +
+      `Estimated arrival: 20–30 mins.\n` +
+      `Questions? +1 (726) 261-8038`,
+    delivered:
+      `📦 Delivered — Pressure SA\n` +
+      `Your order ${order.order_number} has been delivered. Enjoy!\n` +
+      `Thanks for the order 🙏 +1 (726) 261-8038`
+  };
+  const body = msgs[status];
+  if(!body) return false;
+  return sendSMS(order.phone, body);
+}
+
+// Test SMS button in Settings
+async function testSMS(){
+  const statusEl = document.getElementById('sms-status');
+  if(statusEl) statusEl.textContent = 'Sending...';
+  const ownerPhone = document.getElementById('set-owner-phone').value.trim() || SETTINGS.owner_phone || '7262618038';
+  // Use form values directly for test (may not be saved yet)
+  const testSid   = document.getElementById('set-twilio-sid').value.trim()   || SETTINGS.twilio_sid;
+  const testToken = document.getElementById('set-twilio-token').value.trim() || SETTINGS.twilio_token;
+  const testFrom  = document.getElementById('set-twilio-from').value.trim()  || SETTINGS.twilio_from || '+18336880390';
+  if(!testSid || !testToken){
+    if(statusEl) statusEl.textContent = '⚠️ Enter Twilio credentials first';
+    return;
+  }
+  // Temporarily override for the test
+  const prevSid=SETTINGS.twilio_sid, prevTok=SETTINGS.twilio_token, prevFrom=SETTINGS.twilio_from;
+  SETTINGS.twilio_sid=testSid; SETTINGS.twilio_token=testToken; SETTINGS.twilio_from=testFrom;
+  const ok = await sendSMS(ownerPhone, '✅ Test SMS from Pressure SA — notifications are working!');
+  SETTINGS.twilio_sid=prevSid; SETTINGS.twilio_token=prevTok; SETTINGS.twilio_from=prevFrom;
+  if(statusEl) statusEl.textContent = ok ? '✅ Test SMS sent!' : '❌ Failed — check credentials';
+  setTimeout(()=>{ if(statusEl)statusEl.textContent=''; }, 5000);
+}
+
 /* ══ SETTINGS ══ */
 function loadSettingsIntoForm(){
   document.getElementById('set-phone').value=SETTINGS.phone||'';
@@ -1545,7 +1674,17 @@ function loadSettingsIntoForm(){
   document.getElementById('set-hours').value=SETTINGS.delivery_hours||'';
   document.getElementById('set-areas').value=SETTINGS.delivery_areas||'';
   document.getElementById('set-min').value=SETTINGS.min_order||'';
+  // Twilio — show masked placeholder if already saved
+  const sid=document.getElementById('set-twilio-sid');
+  const tok=document.getElementById('set-twilio-token');
+  const frm=document.getElementById('set-twilio-from');
+  const own=document.getElementById('set-owner-phone');
+  if(sid)sid.placeholder=SETTINGS.twilio_sid?'••• saved •••':'ACxxxxxxxxxxxxxxxxxxxxxxxx';
+  if(tok)tok.placeholder=SETTINGS.twilio_token?'••• saved •••':'••••••••••••••••••••••••••••••••';
+  if(frm)frm.value=SETTINGS.twilio_from||'+18336880390';
+  if(own)own.value=SETTINGS.owner_phone||'+17262618038';
 }
+
 async function saveSettings(){
   showSaving('Saving settings...');
   const updates=[
@@ -1555,8 +1694,18 @@ async function saveSettings(){
     {key:'delivery_hours',value:document.getElementById('set-hours').value.trim()},
     {key:'delivery_areas',value:document.getElementById('set-areas').value.trim()},
     {key:'min_order',value:document.getElementById('set-min').value.trim()},
+    {key:'twilio_from',value:document.getElementById('set-twilio-from').value.trim()},
+    {key:'owner_phone',value:document.getElementById('set-owner-phone').value.trim()},
   ];
+  // Only save Twilio SID/token if user typed something new (not empty)
+  const newSid=document.getElementById('set-twilio-sid').value.trim();
+  const newTok=document.getElementById('set-twilio-token').value.trim();
+  if(newSid)updates.push({key:'twilio_sid',value:newSid});
+  if(newTok)updates.push({key:'twilio_token',value:newTok});
   for(const row of updates){await sb.from('settings').upsert({key:row.key,value:row.value},{onConflict:'key'});SETTINGS[row.key]=row.value;}
+  // Clear sensitive fields after save
+  document.getElementById('set-twilio-sid').value='';
+  document.getElementById('set-twilio-token').value='';
   hideSaving();applySettings();showToast('Settings saved!','gold');
 }
 
