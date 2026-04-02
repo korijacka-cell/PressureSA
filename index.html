@@ -1558,7 +1558,7 @@ function openEditor(id,cat){
   const isConcentrate=cat==='concentrate';
   const isWeightBased=isFlower||isConcentrate;
   const isMerch=cat==='merch';
-  const isVariant=cat==='vape'||cat==='wrap'||cat==='edible';
+  const isVariant=cat==='vape'||cat==='wrap'||cat==='edible'||cat==='concentrate';
   document.getElementById('pe-title').textContent=isNew?`Add ${cat.charAt(0).toUpperCase()+cat.slice(1)}`:'Edit Product';
   document.getElementById('pe-del-btn').style.display=isNew?'none':'block';
   document.getElementById('pe-flower-fields').classList.toggle('hidden',!isFlower);
@@ -1598,6 +1598,7 @@ function openEditor(id,cat){
       document.getElementById('pe-cp7').value=p.price_half||'';
       document.getElementById('pe-cp14').value=p.price_oz||'';
       document.getElementById('pe-cp28').value=p.price_single||'';
+      document.getElementById('pe-variants').value=p.variants||'';
     }else if(isMerch){
       document.getElementById('pe-price').value=p.price_single||'';
       document.getElementById('pe-sizes').value=p.sizes||'';
@@ -1660,12 +1661,13 @@ async function saveProduct(){
         tier:     document.getElementById('pe-tier').value,
         featured: document.getElementById('pe-featured').checked,
       }:{
-        // Concentrate — 1g, 3.5g, 7g, 14g, 1oz
+        // Concentrate — 1g, 3.5g, 7g, 14g, 1oz + strains
         price_eighth: parseFloat(document.getElementById('pe-cp1').value)||0,
         price_quarter:parseFloat(document.getElementById('pe-cp35').value)||0,
         price_half:   parseFloat(document.getElementById('pe-cp7').value)||0,
         price_oz:     parseFloat(document.getElementById('pe-cp14').value)||0,
         price_single: parseFloat(document.getElementById('pe-cp28').value)||0,
+        variants:     document.getElementById('pe-variants').value.trim(),
       }),
     }:isMerch?{
       price_single:parseFloat(document.getElementById('pe-price').value)||0,
