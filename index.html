@@ -948,12 +948,41 @@ button{cursor:pointer;}a{text-decoration:none;}
 
     <!-- Flower prices (by weight) -->
     <div id="pe-weight-prices" class="hidden">
-      <label class="fl" style="margin-bottom:8px">Prices by Weight</label>
+      <label class="fl" style="margin-bottom:8px;display:block">Prices by Weight</label>
       <div class="price-grid">
-        <div class="fg" style="margin-bottom:0"><label class="fl">1/8 oz</label><input class="fi" id="pe-p35" type="number" placeholder="45"></div>
-        <div class="fg" style="margin-bottom:0"><label class="fl">1/4 oz</label><input class="fi" id="pe-p7" type="number" placeholder="80"></div>
-        <div class="fg" style="margin-bottom:0"><label class="fl">1/2 oz</label><input class="fi" id="pe-p14" type="number" placeholder="150"></div>
-        <div class="fg" style="margin-bottom:0"><label class="fl">1 oz</label><input class="fi" id="pe-p28" type="number" placeholder="280"></div>
+        <div class="fg" style="margin-bottom:0"><label class="fl">1/8 oz ($)</label><input class="fi" id="pe-p35" type="number" placeholder="45"></div>
+        <div class="fg" style="margin-bottom:0"><label class="fl">1/4 oz ($)</label><input class="fi" id="pe-p7" type="number" placeholder="80"></div>
+        <div class="fg" style="margin-bottom:0"><label class="fl">1/2 oz ($)</label><input class="fi" id="pe-p14" type="number" placeholder="150"></div>
+        <div class="fg" style="margin-bottom:0"><label class="fl">1 oz ($)</label><input class="fi" id="pe-p28" type="number" placeholder="280"></div>
+      </div>
+    </div>
+
+    <!-- Concentrate prices (by gram) — 5 clearly separated fields -->
+    <div id="pe-con-prices" class="hidden">
+      <label class="fl" style="margin-bottom:12px;display:block">Prices by Size</label>
+      <div class="f2" style="margin-bottom:12px">
+        <div class="fg" style="margin-bottom:0">
+          <label class="fl">1g ($)</label>
+          <input class="fi" id="pe-cp1" type="number" placeholder="20">
+        </div>
+        <div class="fg" style="margin-bottom:0">
+          <label class="fl">3.5g ($)</label>
+          <input class="fi" id="pe-cp35" type="number" placeholder="60">
+        </div>
+      </div>
+      <div class="f2" style="margin-bottom:12px">
+        <div class="fg" style="margin-bottom:0">
+          <label class="fl">7g ($)</label>
+          <input class="fi" id="pe-cp7" type="number" placeholder="110">
+        </div>
+        <div class="fg" style="margin-bottom:0">
+          <label class="fl">14g ($)</label>
+          <input class="fi" id="pe-cp14" type="number" placeholder="200">
+        </div>
+      </div>
+      <div class="fg">
+        <label class="fl">1 oz / 28g ($)</label>
+        <input class="fi" id="pe-cp28" type="number" placeholder="350">
       </div>
     </div>
 
@@ -1086,8 +1115,10 @@ function renderAllCategories(){
 }
 
 function getPrice(p,w){
-  if(p.category==='flower'||p.category==='concentrate')
+  if(p.category==='flower')
     return w===3.5?p.price_eighth:w===7?p.price_quarter:w===14?p.price_half:p.price_oz;
+  if(p.category==='concentrate')
+    return w===3.5?p.price_eighth:w===7?p.price_quarter:w===14?p.price_half:w===28?p.price_oz:p.price_single||0;
   return p.price_single||0;
 }
 
@@ -1113,9 +1144,9 @@ function buildProductCards(list,cat){
   const isConcentrate=cat==='concentrate';
   const isWeightBased=isFlower||isConcentrate;
   const isMerch=cat==='merch';
-  const WL_CON={3.5:'3.5g',7:'7g',14:'14g',28:'14g'}; // concentrates: 1g,3.5g,7g,14g mapped to same DB fields
-  const CON_WTS=[3.5,7,14,28]; // reuse same DB columns; labels differ
-  const CON_WL={3.5:'1g',7:'3.5g',14:'7g',28:'14g'};
+  const CON_WTS=[3.5,7,14,28,99]; // 99 = sentinel for 1oz (maps to price_single)
+  const CON_WL={3.5:'1g',7:'3.5g',14:'7g',28:'14g',99:'1oz'};
+  function getConPrice(p,w){return w===3.5?p.price_eighth:w===7?p.price_quarter:w===14?p.price_half:w===28?p.price_oz:p.price_single||0;}
   return list.map(p=>{
     const w=selW[p.id]||3.5;
     const price=getPrice(p,w);
@@ -1126,7 +1157,7 @@ function buildProductCards(list,cat){
     const variantsField=p.variants?p.variants.split(',').map(v=>v.trim()).filter(Boolean):[];
     const selVariant=selVars[p.id]?.variant||variantsField[0]||'';
 
-    const wRow=isFlower?`<div class="wrow">${[3.5,7,14,28].map(wt=>`<button class="wbtn ${wt===w?'sel':''}" onclick="pickW(${p.id},${wt})">${WL[wt]}<span class="wp">$${getPrice(p,wt)}</span></button>`).join('')}</div>`:isConcentrate?`<div class="wrow">${[3.5,7,14,28].map(wt=>`<button class="wbtn ${wt===w?'sel':''}" onclick="pickW(${p.id},${wt})">${CON_WL[wt]}<span class="wp">$${getPrice(p,wt)}</span></button>`).join('')}</div>`:'';
+    const wRow=isFlower?`<div class="wrow">${[3.5,7,14,28].map(wt=>`<button class="wbtn ${wt===w?'sel':''}" onclick="pickW(${p.id},${wt})">${WL[wt]}<span class="wp">$${getPrice(p,wt)}</span></button>`).join('')}</div>`:isConcentrate?`<div class="wrow">${[3.5,7,14,28,99].map(wt=>`<button class="wbtn ${wt===w?'sel':''}" onclick="pickW(${p.id},${wt})">${CON_WL[wt]}<span class="wp">$${getConPrice(p,wt)}</span></button>`).join('')}</div>`:'';
 
     const sizeRow=isMerch&&variants.length>1?`<div class="var-row">${variants.map(s=>`<button class="var-btn ${sv.size===s?'sel':''}" onclick="pickVar(${p.id},'size','${s}',this)">${s}</button>`).join('')}</div>`:'';
     const colorRow=isMerch&&colors.length>1?`<div class="var-row">${colors.map(c=>`<button class="var-btn ${sv.color===c?'sel':''}" onclick="pickVar(${p.id},'color','${c}',this)">${c}</button>`).join('')}</div>`:'';
@@ -1183,8 +1214,10 @@ function openPDP(pid){
   const isConcentrate=cat==='concentrate';
   const isWeightBased=isFlower||isConcentrate;
   const isMerch=cat==='merch';
-  const CON_WL={3.5:'1g',7:'3.5g',14:'7g',28:'14g'};
+  const CON_WL={3.5:'1g',7:'3.5g',14:'7g',28:'14g',99:'1oz'};
   const wLabels=isConcentrate?CON_WL:WL;
+  const wSizes=isConcentrate?[3.5,7,14,28,99]:[3.5,7,14,28];
+  const conPriceMap={3.5:p.price_eighth,7:p.price_quarter,14:p.price_half,28:p.price_oz,99:p.price_single};
   const w=selW[p.id]||3.5;
   const price=getPrice(p,w);
   const imgEl=p.img_url?`<img src="${p.img_url}" alt="${p.name}">`:`<span style="font-size:6rem;position:relative;z-index:1">${p.emoji||'🌿'}</span>`;
@@ -1194,7 +1227,7 @@ function openPDP(pid){
   const flavorVars=p.variants?p.variants.split(',').map(v=>v.trim()).filter(Boolean):[];
   const selFlavor=selVars[p.id]?.variant||flavorVars[0]||'';
 
-  const wRow=isWeightBased?`<div class="pdp-label">Select ${isConcentrate?'Size':'Weight'}</div><div class="pdp-wrow">${[3.5,7,14,28].map(wt=>`<button class="pdp-wbtn ${wt===w?'sel':''}" onclick="pdpPickW(${p.id},${wt},${JSON.stringify({3.5:p.price_eighth,7:p.price_quarter,14:p.price_half,28:p.price_oz})})">${wLabels[wt]}<span class="pdp-wp">$${getPrice(p,wt)}</span></button>`).join('')}</div>`:'';
+  const wRow=isWeightBased?`<div class="pdp-label">Select ${isConcentrate?'Size':'Weight'}</div><div class="pdp-wrow">${wSizes.map(wt=>`<button class="pdp-wbtn ${wt===w?'sel':''}" onclick="pdpPickW(${p.id},${wt},${JSON.stringify(conPriceMap)})">${wLabels[wt]}<span class="pdp-wp">$${isConcentrate?conPriceMap[wt]||0:getPrice(p,wt)}</span></button>`).join('')}</div>`:'';
 
   const sizeRow=isMerch&&variants.length?`<div class="pdp-label">Size</div><div class="pdp-var-row">${variants.map(s=>`<button class="pdp-var-btn ${sv.size===s?'sel':''}" onclick="pdpPickVar(${p.id},'size','${s}')">${s}</button>`).join('')}</div>`:'';
   const colorRow=isMerch&&colors.length?`<div class="pdp-label" style="margin-top:10px">Color</div><div class="pdp-var-row">${colors.map(c=>`<button class="pdp-var-btn ${sv.color===c?'sel':''}" onclick="pdpPickVar(${p.id},'color','${c}')">${c}</button>`).join('')}</div>`:'';
@@ -1531,21 +1564,14 @@ function openEditor(id,cat){
   document.getElementById('pe-flower-fields').classList.toggle('hidden',!isFlower);
   document.getElementById('pe-merch-fields').classList.toggle('hidden',!isMerch);
   document.getElementById('pe-variant-fields').classList.toggle('hidden',!isVariant);
-  document.getElementById('pe-weight-prices').classList.toggle('hidden',!isWeightBased);
+  document.getElementById('pe-weight-prices').classList.toggle('hidden',!isFlower);
+  document.getElementById('pe-con-prices').classList.toggle('hidden',!isConcentrate);
   document.getElementById('pe-single-price').classList.toggle('hidden',isWeightBased);
   document.getElementById('pe-feat-row').classList.toggle('hidden',!isFlower);
-  // Update weight labels for concentrates (grams instead of oz)
-  if(isConcentrate){
-    const labels=document.querySelectorAll('#pe-weight-prices .fl');
-    const gl=['1g ($)','3.5g ($)','7g ($)','14g ($)'];
-    labels.forEach((l,i)=>{if(gl[i])l.textContent=gl[i];});
-  } else if(isFlower){
-    const labels=document.querySelectorAll('#pe-weight-prices .fl');
-    const fl=['1/8 oz','1/4 oz','1/2 oz','1 oz'];
-    labels.forEach((l,i)=>{if(fl[i])l.textContent=fl[i];});
-  }
-  // Reset
-  ['pe-name','pe-emoji','pe-desc','pe-p35','pe-p7','pe-p14','pe-p28','pe-price','pe-sizes','pe-colors','pe-variants'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});
+  // Reset all fields including concentrate-specific ones
+  ['pe-name','pe-emoji','pe-desc','pe-p35','pe-p7','pe-p14','pe-p28',
+   'pe-price','pe-sizes','pe-colors','pe-variants',
+   'pe-cp1','pe-cp35','pe-cp7','pe-cp14','pe-cp28'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});;
   document.getElementById('pe-oos').checked=false;
   const feat=document.getElementById('pe-featured');if(feat)feat.checked=false;
   document.getElementById('pe-preview').style.display='none';
@@ -1567,10 +1593,11 @@ function openEditor(id,cat){
       document.getElementById('pe-p28').value=p.price_oz||'';
       const feat=document.getElementById('pe-featured');if(feat)feat.checked=p.featured||false;
     }else if(isConcentrate){
-      document.getElementById('pe-p35').value=p.price_eighth||'';
-      document.getElementById('pe-p7').value=p.price_quarter||'';
-      document.getElementById('pe-p14').value=p.price_half||'';
-      document.getElementById('pe-p28').value=p.price_oz||'';
+      document.getElementById('pe-cp1').value=p.price_eighth||'';
+      document.getElementById('pe-cp35').value=p.price_quarter||'';
+      document.getElementById('pe-cp7').value=p.price_half||'';
+      document.getElementById('pe-cp14').value=p.price_oz||'';
+      document.getElementById('pe-cp28').value=p.price_single||'';
     }else if(isMerch){
       document.getElementById('pe-price').value=p.price_single||'';
       document.getElementById('pe-sizes').value=p.sizes||'';
@@ -1624,14 +1651,21 @@ async function saveProduct(){
     out_of_stock:document.getElementById('pe-oos').checked,
     ...(img_url!==null&&{img_url}),
     ...(isWeightBased?{
-      price_eighth:parseFloat(document.getElementById('pe-p35').value)||0,
-      price_quarter:parseFloat(document.getElementById('pe-p7').value)||0,
-      price_half:parseFloat(document.getElementById('pe-p14').value)||0,
-      price_oz:parseFloat(document.getElementById('pe-p28').value)||0,
-      ...(isFlower&&{
-        type:document.getElementById('pe-type').value,
-        tier:document.getElementById('pe-tier').value,
-        featured:document.getElementById('pe-featured').checked,
+      ...(isFlower?{
+        price_eighth: parseFloat(document.getElementById('pe-p35').value)||0,
+        price_quarter:parseFloat(document.getElementById('pe-p7').value)||0,
+        price_half:   parseFloat(document.getElementById('pe-p14').value)||0,
+        price_oz:     parseFloat(document.getElementById('pe-p28').value)||0,
+        type:     document.getElementById('pe-type').value,
+        tier:     document.getElementById('pe-tier').value,
+        featured: document.getElementById('pe-featured').checked,
+      }:{
+        // Concentrate — 1g, 3.5g, 7g, 14g, 1oz
+        price_eighth: parseFloat(document.getElementById('pe-cp1').value)||0,
+        price_quarter:parseFloat(document.getElementById('pe-cp35').value)||0,
+        price_half:   parseFloat(document.getElementById('pe-cp7').value)||0,
+        price_oz:     parseFloat(document.getElementById('pe-cp14').value)||0,
+        price_single: parseFloat(document.getElementById('pe-cp28').value)||0,
       }),
     }:isMerch?{
       price_single:parseFloat(document.getElementById('pe-price').value)||0,
