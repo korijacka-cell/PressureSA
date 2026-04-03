@@ -711,26 +711,7 @@ button{cursor:pointer;}a{text-decoration:none;}
         <div class="pay-card cashapp-card" id="pay-cashapp" onclick="selectPayment('cashapp')">
           <div class="pay-icon">💸</div>
           <div class="pay-label">CashApp</div>
-          <div class="pay-sub">$9bigs</div>
-        </div>
-      </div>
-
-      <!-- CashApp Panel -->
-      <div class="cashapp-panel" id="cashapp-panel">
-        <div class="cashapp-cashtag">$9bigs</div>
-        <div class="cashapp-inst">
-          Send your order total to <strong style="color:var(--cashapp)">$9bigs</strong> on CashApp before delivery.<br>
-          Include your order number in the CashApp note so we can confirm.
-        </div>
-        <div class="cashapp-qr">
-          <div id="cashapp-qr-code"></div>
-        </div>
-        <a class="cashapp-link" href="https://cash.app/$9bigs" target="_blank">
-          <span>💸</span> Open CashApp $9bigs
-        </a>
-        <div class="cashapp-note">
-          Screenshot your payment and have it ready when your driver arrives.<br>
-          Questions? Text us at +1 (726) 261-8038
+          <div class="pay-sub">Pay after order is placed</div>
         </div>
       </div>
     </div>
@@ -751,11 +732,48 @@ button{cursor:pointer;}a{text-decoration:none;}
       <div class="si">✅</div>
       <div class="st">Order Placed!</div>
       <div class="order-num" id="success-order-num"></div>
-      <div id="success-cashapp-note" style="display:none;margin-bottom:16px;padding:14px;background:rgba(0,214,50,.06);border:1px solid rgba(0,214,50,.2);border-radius:var(--r);">
-        <p style="font-family:'Oswald';font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--cashapp);margin-bottom:6px">💸 CashApp Payment</p>
-        <p style="font-size:.82rem;color:var(--muted);line-height:1.6">Please send your total to <strong style="color:var(--cashapp)">$9bigs</strong> and include your order number in the note.</p>
+
+      <!-- CASH ON DELIVERY block -->
+      <div id="success-cash-block" style="display:none;margin-bottom:18px;padding:14px;background:rgba(45,122,58,.06);border:1px solid rgba(45,122,58,.25);border-radius:var(--r);text-align:left;">
+        <p style="font-family:'Oswald';font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:#6ddd8a;margin-bottom:6px">💵 Cash on Delivery</p>
+        <p style="font-size:.82rem;color:var(--muted);line-height:1.6">Have your cash ready when the driver arrives. We'll reach out to confirm your delivery window.</p>
       </div>
-      <p class="ss">Your order is confirmed. We'll reach out via your preferred contact to confirm delivery.<br><br><strong style="color:#6ddd8a">Estimated: 1–2 Hours</strong><br><br>Questions? <a href="tel:+17262618038" style="color:var(--gold)">+1 (726) 261-8038</a></p>
+
+      <!-- CASHAPP PAYMENT block — shown after order is placed -->
+      <div id="success-cashapp-block" style="display:none;margin-bottom:18px;background:rgba(0,214,50,.05);border:2px solid rgba(0,214,50,.3);border-radius:var(--r);overflow:hidden;">
+        <div style="background:rgba(0,214,50,.1);padding:12px 16px;border-bottom:1px solid rgba(0,214,50,.2);">
+          <p style="font-family:'Oswald';font-weight:700;font-size:.85rem;letter-spacing:.12em;text-transform:uppercase;color:var(--cashapp)">💸 Step 2 — Send Payment via CashApp</p>
+        </div>
+        <div style="padding:16px;text-align:center;">
+          <p style="font-size:.82rem;color:var(--muted);line-height:1.6;margin-bottom:14px">
+            Your order is confirmed. Now send your total to <strong style="color:var(--cashapp)">$9bigs</strong> on CashApp.<br>
+            <strong style="color:var(--white)">Include your order number in the note.</strong>
+          </p>
+          <div style="display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;margin-bottom:14px;">
+            <div>
+              <div style="font-family:'Oswald';font-size:2rem;font-weight:700;color:var(--cashapp);letter-spacing:.04em;">$9bigs</div>
+              <div style="font-family:'Oswald';font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:2px;">Send To</div>
+            </div>
+            <div style="background:#fff;padding:8px;border-radius:8px;display:inline-block;">
+              <div id="success-qr-code"></div>
+            </div>
+          </div>
+          <div style="background:rgba(0,0,0,.2);border-radius:var(--r);padding:10px 14px;margin-bottom:14px;font-family:'Oswald';font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);">
+            Amount: <strong style="color:var(--gold);font-size:1.1rem;" id="success-amount"></strong>
+            &nbsp;·&nbsp; Note: <strong style="color:var(--white);" id="success-order-ref"></strong>
+          </div>
+          <a id="cashapp-open-link" href="https://cash.app/$9bigs" target="_blank"
+             style="display:inline-flex;align-items:center;gap:8px;background:var(--cashapp);color:#fff;font-family:'Oswald';font-weight:700;font-size:.85rem;letter-spacing:.1em;text-transform:uppercase;padding:11px 24px;border-radius:var(--r);text-decoration:none;transition:opacity .2s;">
+            💸 Open CashApp to Pay
+          </a>
+          <p style="font-size:.68rem;color:var(--muted);margin-top:10px;line-height:1.55;">
+            Screenshot your payment confirmation and have it ready for your driver.<br>
+            Questions? <a href="tel:+17262618038" style="color:var(--gold)">+1 (726) 261-8038</a>
+          </p>
+        </div>
+      </div>
+
+      <p class="ss">We'll reach out via your preferred contact to confirm delivery.<br><strong style="color:#6ddd8a">Estimated: 1–2 Hours</strong></p>
       <button class="btn-g" onclick="goPage('page-store');cart=[];renderCart();updateCount()">Continue Shopping</button>
     </div>
   </div>
@@ -1062,7 +1080,6 @@ async function initApp(){
     document.getElementById('app-loader').style.display='none';
     if(!sessionStorage.getItem('age-verified'))document.getElementById('age-gate').classList.add('show');
     renderCart();
-    buildCashAppQR();
   }catch(e){
     console.error(e);
     renderAllCategories();
@@ -1328,8 +1345,6 @@ function selectPayment(method){
   paymentMethod=method;
   document.getElementById('pay-cash').classList.toggle('active',method==='cash');
   document.getElementById('pay-cashapp').classList.toggle('active',method==='cashapp');
-  document.getElementById('cashapp-panel').classList.toggle('show',method==='cashapp');
-  if(method==='cashapp')buildCashAppQR();
 }
 
 async function placeOrder(){
@@ -1396,11 +1411,28 @@ async function placeOrder(){
     total
   };
 
-  // Navigate to success
+  // Populate success screen
   document.getElementById('success-order-num').textContent = orderNum;
-  const cashNote = document.getElementById('success-cashapp-note');
-  if(cashNote) cashNote.style.display = paymentMethod==='cashapp' ? 'block' : 'none';
-  cart = []; updateCount(); renderCart(); goPage('page-success');
+  document.getElementById('success-cash-block').style.display   = paymentMethod==='cash'     ? 'block' : 'none';
+  document.getElementById('success-cashapp-block').style.display = paymentMethod==='cashapp'  ? 'block' : 'none';
+
+  if(paymentMethod==='cashapp'){
+    // Fill in amount and order reference
+    document.getElementById('success-amount').textContent   = `$${total}`;
+    document.getElementById('success-order-ref').textContent = orderNum;
+    // Update CashApp link with amount pre-filled
+    const cashtag = SETTINGS.cashapp || '$9bigs';
+    const tag = cashtag.replace('$','');
+    document.getElementById('cashapp-open-link').href = `https://cash.app/${tag}/${total}`;
+    // Build QR code on the success page (fresh each order)
+    const qrEl = document.getElementById('success-qr-code');
+    qrEl.innerHTML = '';
+    try{
+      new QRCode(qrEl,{text:`https://cash.app/$${tag}`,width:110,height:110,colorDark:'#000',colorLight:'#fff',correctLevel:QRCode.CorrectLevel.H});
+    }catch(e){}
+  }
+
+  cart=[]; updateCount(); renderCart(); goPage('page-success');
 
   // Fire SMS non-blocking after navigation
   notifyOwner(newOrder).catch(e=>console.warn('Owner SMS failed:',e));
