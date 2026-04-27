@@ -155,6 +155,7 @@ button{cursor:pointer;}a{text-decoration:none;}
 .tbadge.merch{background:rgba(201,168,64,.88);color:#111;}
 .tbadge.edible{background:rgba(200,60,180,.85);color:#ffd6f7;}
 .tbadge.vape{background:rgba(30,120,200,.85);color:#b8e0ff;}
+.tbadge.preroll{background:rgba(60,40,20,.88);color:#ffcc88;}
 .tbadge.concentrate{background:rgba(80,60,20,.88);color:#ffd080;}
 .trbadge{position:absolute;top:7px;right:7px;font-family:'Oswald',sans-serif;font-weight:700;font-size:.54rem;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:3px;z-index:2;}
 .trbadge.elite{background:rgba(201,168,64,.9);color:#111;}
@@ -290,8 +291,6 @@ button{cursor:pointer;}a{text-decoration:none;}
 .pay-card .pay-sub{font-size:.65rem;color:var(--muted);margin-top:2px;}
 
 /* CashApp panel */
-.cashapp-panel{background:rgba(0,214,50,.05);border:1px solid rgba(0,214,50,.2);border-radius:var(--r);padding:20px;margin-top:14px;display:none;text-align:center;}
-.cashapp-panel.show{display:block;}
 .cashapp-cashtag{font-family:'Oswald',sans-serif;font-weight:700;font-size:1.6rem;color:var(--cashapp);letter-spacing:.04em;margin-bottom:4px;}
 .cashapp-inst{font-size:.78rem;color:var(--muted);line-height:1.6;margin-bottom:16px;}
 .cashapp-qr{background:#fff;padding:10px;border-radius:8px;display:inline-block;margin-bottom:12px;}
@@ -408,7 +407,18 @@ button{cursor:pointer;}a{text-decoration:none;}
 .dk{color:var(--muted);}
 .dv{color:var(--white);text-align:right;max-width:60%;font-weight:500;}
 
-/* ── TOAST ── */
+/* ── WEEKLY ORDER FOLDERS ── */
+.week-folder{background:var(--card);border:1px solid var(--border);border-radius:var(--r);margin-bottom:12px;overflow:hidden;}
+.week-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;cursor:pointer;user-select:none;transition:background .18s;}
+.week-header:hover{background:rgba(255,255,255,.03);}
+.week-title{font-family:'Oswald',sans-serif;font-weight:700;font-size:.88rem;letter-spacing:.08em;text-transform:uppercase;color:var(--white);display:flex;align-items:center;gap:10px;}
+.week-badge{font-family:'Oswald',sans-serif;font-weight:700;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;background:var(--green);color:#fff;padding:2px 9px;border-radius:100px;}
+.week-badge.done{background:var(--faint);color:var(--muted);}
+.week-rev{font-family:'Oswald',sans-serif;font-weight:700;font-size:.9rem;color:var(--gold);}
+.week-chevron{color:var(--muted);font-size:.85rem;transition:transform .2s;}
+.week-chevron.open{transform:rotate(180deg);}
+.week-body{display:none;border-top:1px solid var(--border);}
+.week-body.open{display:block;}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(12px);background:var(--green);color:#fff;font-family:'Oswald',sans-serif;font-weight:700;font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;padding:12px 22px;border-radius:var(--r);z-index:9100;opacity:0;transition:all .25s;pointer-events:none;white-space:nowrap;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 .toast.gold{background:var(--gold);color:var(--bg);}
@@ -476,6 +486,7 @@ button{cursor:pointer;}a{text-decoration:none;}
     <a class="nav-logo" onclick="goPage('page-store')"><span class="nav-logo-text">Pressure SA</span></a>
     <div class="desktop-links">
       <a onclick="scrollToSection('shop')">Flower</a>
+      <a onclick="scrollToSection('prerolls-section')">Pre-Rolls</a>
       <a onclick="scrollToSection('edibles-section')">Edibles</a>
       <a onclick="scrollToSection('vapes-section')">Vapes</a>
       <a onclick="scrollToSection('wraps-section')">Wraps</a>
@@ -487,6 +498,7 @@ button{cursor:pointer;}a{text-decoration:none;}
   <div class="mobile-menu" id="mobileMenu" onclick="if(event.target===this)toggleMenu()">
     <div class="mobile-menu-panel">
       <a onclick="scrollToSection('shop');toggleMenu()">🌿 Flower</a>
+      <a onclick="scrollToSection('prerolls-section');toggleMenu()">🚬 Pre-Rolls</a>
       <a onclick="scrollToSection('edibles-section');toggleMenu()">🍬 Edibles</a>
       <a onclick="scrollToSection('vapes-section');toggleMenu()">💨 Nicotine Vapes</a>
       <a onclick="scrollToSection('wraps-section');toggleMenu()">🍂 Wraps & Cigars</a>
@@ -522,6 +534,9 @@ button{cursor:pointer;}a{text-decoration:none;}
       <div class="cat-tile" onclick="scrollToSection('shop')">
         <span class="ce">🌿</span><div class="cn">Flower</div>
       </div>
+      <div class="cat-tile" onclick="scrollToSection('prerolls-section')">
+        <span class="ce">🚬</span><div class="cn">Pre-Rolls</div>
+      </div>
       <div class="cat-tile" onclick="scrollToSection('edibles-section')">
         <span class="ce">🍬</span><div class="cn">Edibles</div>
       </div>
@@ -530,9 +545,6 @@ button{cursor:pointer;}a{text-decoration:none;}
       </div>
       <div class="cat-tile" onclick="scrollToSection('wraps-section')">
         <span class="ce">🍂</span><div class="cn">Wraps</div>
-      </div>
-      <div class="cat-tile" onclick="goPage('page-merch')">
-        <span class="ce">👕</span><div class="cn">Merch</div>
       </div>
       <div class="cat-tile" onclick="scrollToSection('concentrates-section')">
         <span class="ce">🪨</span><div class="cn">Concentrates</div>
@@ -558,6 +570,12 @@ button{cursor:pointer;}a{text-decoration:none;}
       <button class="ftab" onclick="filterP('hybrid',this)">Hybrid</button>
     </div>
     <div class="product-grid" id="pgrid"><div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted);font-family:'Oswald';letter-spacing:.1em;text-transform:uppercase">Loading...</div></div>
+  </div>
+
+  <!-- PRE-ROLLS -->
+  <div class="section" id="prerolls-section">
+    <div class="sec-head">🚬 Pre-Rolls <span class="sec-sub" id="prcnt"></span></div>
+    <div class="cat-product-grid" id="prerolls-grid"><div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--muted);font-family:'Oswald';letter-spacing:.1em;text-transform:uppercase">Loading...</div></div>
   </div>
 
   <!-- EDIBLES -->
@@ -594,6 +612,7 @@ button{cursor:pointer;}a{text-decoration:none;}
       <div class="fc">
         <h4>Shop</h4>
         <a onclick="scrollToSection('shop')">Flower</a>
+        <a onclick="scrollToSection('prerolls-section')">Pre-Rolls</a>
         <a onclick="scrollToSection('edibles-section')">Edibles</a>
         <a onclick="scrollToSection('vapes-section')">Vapes</a>
         <a onclick="scrollToSection('wraps-section')">Wraps</a>
@@ -808,6 +827,7 @@ button{cursor:pointer;}a{text-decoration:none;}
     <div class="adm-tabs">
       <button class="adm-tab active" onclick="switchTab('tab-orders',this)">📋 Orders</button>
       <button class="adm-tab" onclick="switchTab('tab-flower',this)">🌿 Flower</button>
+      <button class="adm-tab" onclick="switchTab('tab-prerolls',this)">🚬 Pre-Rolls</button>
       <button class="adm-tab" onclick="switchTab('tab-edibles',this)">🍬 Edibles</button>
       <button class="adm-tab" onclick="switchTab('tab-vapes',this)">💨 Vapes</button>
       <button class="adm-tab" onclick="switchTab('tab-wraps',this)">🍂 Wraps</button>
@@ -820,16 +840,20 @@ button{cursor:pointer;}a{text-decoration:none;}
       <!-- ORDERS -->
       <div class="adm-panel active" id="tab-orders">
         <div class="stats-row" id="astats"></div>
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:10px">
-          <div class="adm-sec" style="margin-bottom:0">Live Orders</div>
+
+        <!-- Filter bar -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <button class="ftab active" onclick="setOrderFilter('all',this)">All</button>
+            <button class="ftab" onclick="setOrderFilter('pending',this)">Pending</button>
+            <button class="ftab" onclick="setOrderFilter('out_for_delivery',this)">Out for Delivery</button>
+            <button class="ftab" onclick="setOrderFilter('delivered',this)">Delivered</button>
+          </div>
           <button class="btn-g" style="font-size:.72rem;padding:7px 14px" onclick="loadOrders()">🔄 Refresh</button>
         </div>
-        <div class="otbl-wrap">
-          <table class="otbl">
-            <thead><tr><th>#</th><th>Customer</th><th>Phone</th><th>Payment</th><th>Method</th><th>Address</th><th>Items</th><th>Total</th><th>Status</th><th>Time</th><th>Actions</th></tr></thead>
-            <tbody id="atbody"></tbody>
-          </table>
-        </div>
+
+        <!-- Weekly folders -->
+        <div id="orders-weeks"></div>
       </div>
 
       <!-- FLOWER -->
@@ -839,6 +863,15 @@ button{cursor:pointer;}a{text-decoration:none;}
           <button class="btn-g" onclick="openEditor(null,'flower')" style="font-size:.75rem;padding:8px 16px">+ Add Flower</button>
         </div>
         <div class="pm-grid" id="pm-flower"></div>
+      </div>
+
+      <!-- PRE-ROLLS -->
+      <div class="adm-panel" id="tab-prerolls">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+          <div class="adm-sec" style="margin-bottom:0">Pre-Rolls</div>
+          <button class="btn-g" onclick="openEditor(null,'preroll')" style="font-size:.75rem;padding:8px 16px">+ Add Pre-Roll</button>
+        </div>
+        <div class="pm-grid" id="pm-prerolls"></div>
       </div>
 
       <!-- EDIBLES -->
@@ -1062,6 +1095,7 @@ let editId=null,editCat=null;
 /* ══ CATEGORY MAP ══ */
 const CAT_GRID={
   flower:{gridId:'pgrid',cntId:'pcnt',emoji:'🌿',label:'flower'},
+  preroll:{gridId:'prerolls-grid',cntId:'prcnt',emoji:'🚬',label:'preroll'},
   edible:{gridId:'edibles-grid',cntId:'ecnt',emoji:'🍬',label:'edible'},
   vape:{gridId:'vapes-grid',cntId:'vcnt',emoji:'💨',label:'vape'},
   wrap:{gridId:'wraps-grid',cntId:'wcnt',emoji:'🍂',label:'wrap'},
@@ -1087,14 +1121,6 @@ async function initApp(){
     if(!sessionStorage.getItem('age-verified'))document.getElementById('age-gate').classList.add('show');
     renderCart();
   }
-}
-
-function buildCashAppQR(){
-  const el=document.getElementById('cashapp-qr-code');
-  if(!el||el.innerHTML)return;
-  try{
-    new QRCode(el,{text:'https://cash.app/$9bigs',width:120,height:120,colorDark:'#000',colorLight:'#fff',correctLevel:QRCode.CorrectLevel.H});
-  }catch(e){console.log('QR unavailable',e);}
 }
 
 /* ══ LOAD DATA ══ */
@@ -1124,6 +1150,7 @@ function applySettings(){
 /* ══ RENDER ALL CATEGORY GRIDS ══ */
 function renderAllCategories(){
   renderCatGrid('flower');
+  renderCatGrid('preroll');
   renderCatGrid('edible');
   renderCatGrid('vape');
   renderCatGrid('wrap');
@@ -1457,62 +1484,150 @@ async function doLogin(){
 async function doLogout(){await sb.auth.signOut();currentUser=null;goPage('page-store');}
 
 /* ══ ORDERS ══ */
+let allOrders=[], orderFilter='all';
+
+function setOrderFilter(f,btn){
+  orderFilter=f;
+  document.querySelectorAll('#tab-orders .ftab').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  renderWeeklyOrders();
+}
+
 async function loadOrders(){
   const{data,error}=await sb.from('orders').select('*').order('created_at',{ascending:false});
   if(error){console.error(error);return;}
-  renderOrdersTable(data||[]);renderAdminStats(data||[]);
+  allOrders=data||[];
+  renderAdminStats(allOrders);
+  renderWeeklyOrders();
 }
+
 function renderAdminStats(orders=[]){
   const pend=orders.filter(o=>o.status==='pending').length;
   const out=orders.filter(o=>o.status==='out_for_delivery').length;
   const done=orders.filter(o=>o.status==='delivered').length;
-  const rev=orders.filter(o=>o.status==='delivered').reduce((a,b)=>a+b.total,0);
-  const cashapp=orders.filter(o=>o.payment_method==='cashapp').length;
+  const rev=orders.filter(o=>o.status==='delivered').reduce((a,b)=>a+(b.total||0),0);
   const el=document.getElementById('astats');if(!el)return;
   el.innerHTML=`
     <div class="sc"><div class="sc-num">${pend}</div><div class="sc-lbl">Pending</div></div>
     <div class="sc"><div class="sc-num">${out}</div><div class="sc-lbl">Out for Delivery</div></div>
     <div class="sc"><div class="sc-num">${done}</div><div class="sc-lbl">Delivered</div></div>
-    <div class="sc"><div class="sc-num">$${rev}</div><div class="sc-lbl">Revenue Today</div></div>`;
+    <div class="sc"><div class="sc-num">$${rev.toFixed(0)}</div><div class="sc-lbl">Total Revenue</div></div>`;
 }
-function renderOrdersTable(orders){
-  const tbody=document.getElementById('atbody');if(!tbody)return;
-  if(!orders.length){tbody.innerHTML=`<tr><td colspan="11" style="text-align:center;color:var(--muted);padding:32px;font-family:'Oswald';letter-spacing:.1em;text-transform:uppercase">No orders yet</td></tr>`;return;}
-  const ci={text:'💬',telegram:'✈️',call:'📞'};
+
+function getWeekLabel(dateStr){
+  const d=new Date(dateStr);
+  // Get Monday of that week
+  const day=d.getDay();
+  const diff=d.getDate()-(day===0?6:day-1);
+  const mon=new Date(d.setDate(diff));
+  const sun=new Date(mon);sun.setDate(mon.getDate()+6);
+  const fmt=dt=>dt.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+  const now=new Date();
+  const monStart=new Date(now);monStart.setDate(now.getDate()-(now.getDay()===0?6:now.getDay()-1));monStart.setHours(0,0,0,0);
+  const isThisWeek=mon>=monStart;
+  return isThisWeek?`This Week (${fmt(mon)} – ${fmt(sun)})`:`Week of ${fmt(mon)} – ${fmt(sun)}`;
+}
+
+function renderWeeklyOrders(){
+  const container=document.getElementById('orders-weeks');if(!container)return;
+  const filtered=orderFilter==='all'?allOrders:allOrders.filter(o=>o.status===orderFilter);
+  if(!filtered.length){container.innerHTML=`<div style="text-align:center;padding:40px;color:var(--muted);font-family:'Oswald';letter-spacing:.1em;text-transform:uppercase">No orders found</div>`;return;}
+
+  // Group by week
+  const weeks={};
+  filtered.forEach(o=>{
+    const label=getWeekLabel(o.created_at);
+    if(!weeks[label])weeks[label]=[];
+    weeks[label].push(o);
+  });
+
+  container.innerHTML=Object.entries(weeks).map(([label,orders],wi)=>{
+    const total=orders.reduce((a,b)=>a+(b.total||0),0);
+    const pending=orders.filter(o=>o.status==='pending'||o.status==='out_for_delivery').length;
+    const isFirst=wi===0;
+    return`<div class="week-folder">
+      <div class="week-header" onclick="toggleWeek(this)">
+        <div class="week-title">
+          <span>📁</span>
+          <span>${label}</span>
+          <span class="week-badge ${pending===0?'done':''}">${pending>0?pending+' active':orders.length+' orders'}</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:16px;">
+          <span class="week-rev">$${total.toFixed(0)}</span>
+          <span class="week-chevron ${isFirst?'open':''}">▼</span>
+        </div>
+      </div>
+      <div class="week-body ${isFirst?'open':''}">
+        <div class="otbl-wrap" style="border:none;border-radius:0;">
+          <table class="otbl">
+            <thead><tr><th>#</th><th>Customer</th><th>Phone</th><th>Payment</th><th>Items</th><th>Total</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+            <tbody>${buildOrderRows(orders)}</tbody>
+          </table>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleWeek(header){
+  const body=header.nextElementSibling;
+  const chev=header.querySelector('.week-chevron');
+  body.classList.toggle('open');
+  chev.classList.toggle('open');
+}
+
+function buildOrderRows(orders){
   const sm={pending:['s-pend','Pending'],out_for_delivery:['s-out','Out for Delivery'],delivered:['s-done','Delivered']};
-  tbody.innerHTML=orders.map((o,i)=>{
+  return orders.map(o=>{
     const[sc,sl]=sm[o.status]||['s-pend','Pending'];
     const items=(o.items||[]).map(it=>`${it.name}${it.meta?' ('+it.meta+')':''}`).join(', ');
+    const date=new Date(o.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric'});
     const time=new Date(o.created_at).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-    const payBadge=o.payment_method==='cashapp'?`<span class="spill s-cash" style="font-size:.58rem">CashApp</span>`:`<span style="font-size:.72rem;color:var(--muted)">Cash</span>`;
+    const payBadge=o.payment_method==='cashapp'
+      ?`<span class="spill s-cash" style="font-size:.56rem">CashApp</span>`
+      :`<span style="font-size:.68rem;color:var(--muted)">Cash</span>`;
     return`<tr>
-      <td style="color:var(--gold);font-family:'Oswald';font-weight:700;white-space:nowrap">${o.order_number}</td>
-      <td><strong>${o.customer_name}</strong></td>
-      <td><a href="tel:${o.phone}" style="color:var(--gold)">${o.phone}</a></td>
+      <td style="color:var(--gold);font-family:'Oswald';font-weight:700;white-space:nowrap;font-size:.78rem">${o.order_number}</td>
+      <td><strong style="font-size:.82rem">${o.customer_name}</strong><div style="font-size:.65rem;color:var(--muted)"><a href="tel:${o.phone}" style="color:var(--gold)">${o.phone}</a></div></td>
       <td>${payBadge}</td>
-      <td style="color:var(--muted)">${o.delivery_method||'delivery'}</td>
-      <td style="max-width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--muted)">${o.address||''}</td>
-      <td style="max-width:110px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--muted);font-size:.72rem">${items}</td>
+      <td style="color:var(--muted);font-size:.68rem;max-width:130px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${items}</td>
       <td style="color:var(--gold);font-family:'Oswald';font-weight:700">$${o.total}</td>
-      <td><span class="spill ${sc}">${sl}</span></td>
-      <td style="color:var(--muted);white-space:nowrap">${time}</td>
+      <td><span class="spill ${sc}" style="font-size:.58rem">${sl}</span></td>
+      <td style="color:var(--muted);font-size:.68rem;white-space:nowrap">${date}<br>${time}</td>
       <td style="white-space:nowrap">
         <button class="tbtn view" onclick="viewOrder('${o.order_number}')">View</button>
         ${o.status==='pending'?`<button class="tbtn disp" onclick="updateStatus('${o.id}','out_for_delivery')">Dispatch</button>`:''}
         ${o.status==='out_for_delivery'?`<button class="tbtn done" onclick="updateStatus('${o.id}','delivered')">✓ Done</button>`:''}
+        <button class="tbtn del" onclick="deleteOrder('${o.id}','${o.order_number}')">🗑</button>
       </td>
     </tr>`;
   }).join('');
 }
+
+async function deleteOrder(id,orderNum){
+  if(!confirm(`Delete order ${orderNum}? This cannot be undone.`))return;
+  const{error}=await sb.from('orders').delete().eq('id',id);
+  if(error){showToast('Delete failed','err');return;}
+  allOrders=allOrders.filter(o=>o.id!==id);
+  renderAdminStats(allOrders);
+  renderWeeklyOrders();
+  showToast(`Order ${orderNum} deleted`);
+}
+
 async function updateStatus(id,status){
   const{error}=await sb.from('orders').update({status}).eq('id',id);
   if(error){showToast('Update failed','err');return;}
-  // Fetch full order to get customer phone for notification
   const{data:order}=await sb.from('orders').select('*').eq('id',id).single();
-  if(order && (status==='out_for_delivery'||status==='delivered')){
-    notifyCustomer(order, status).catch(e=>console.warn('Status SMS failed:',e));
+  if(order){
+    const idx=allOrders.findIndex(o=>o.id===id);
+    if(idx>-1)allOrders[idx]={...allOrders[idx],status};
+    if(status==='out_for_delivery'||status==='delivered'){
+      notifyCustomer(order,status).catch(e=>console.warn('Status notify failed:',e));
+    }
   }
-  await loadOrders();showToast('Order updated — customer notified','gold');
+  renderAdminStats(allOrders);
+  renderWeeklyOrders();
+  showToast('Order updated','gold');
 }
 function viewOrder(orderNum){
   sb.from('orders').select('*').eq('order_number',orderNum).single().then(({data:o})=>{
@@ -1541,6 +1656,7 @@ function closeModal(){document.getElementById('omodal').classList.remove('open')
 /* ══ PRODUCT MANAGER ══ */
 function renderAllPMGrids(){
   renderPMGrid('flower','pm-flower');
+  renderPMGrid('preroll','pm-prerolls');
   renderPMGrid('edible','pm-edibles');
   renderPMGrid('vape','pm-vapes');
   renderPMGrid('wrap','pm-wraps');
@@ -1580,7 +1696,7 @@ async function quickToggleOOS(id,cat){
   renderAllCategories();
   showToast('Stock status updated','gold');
 }
-function catToGridKey(cat){return{flower:'flower',edible:'edibles',vape:'vapes',wrap:'wraps',concentrate:'concentrates',merch:'merch'}[cat]||cat;}
+function catToGridKey(cat){return{flower:'flower',preroll:'prerolls',edible:'edibles',vape:'vapes',wrap:'wraps',concentrate:'concentrates',merch:'merch'}[cat]||cat;}
 
 /* ══ PRODUCT EDITOR ══ */
 function openEditor(id,cat){
@@ -1590,7 +1706,7 @@ function openEditor(id,cat){
   const isConcentrate=cat==='concentrate';
   const isWeightBased=isFlower||isConcentrate;
   const isMerch=cat==='merch';
-  const isVariant=cat==='vape'||cat==='wrap'||cat==='edible'||cat==='concentrate';
+  const isVariant=cat==='vape'||cat==='wrap'||cat==='edible'||cat==='concentrate'||cat==='preroll';
   document.getElementById('pe-title').textContent=isNew?`Add ${cat.charAt(0).toUpperCase()+cat.slice(1)}`:'Edit Product';
   document.getElementById('pe-del-btn').style.display=isNew?'none':'block';
   document.getElementById('pe-flower-fields').classList.toggle('hidden',!isFlower);
@@ -1918,6 +2034,7 @@ function switchTab(panelId,btn){
   document.getElementById(panelId).classList.add('active');btn.classList.add('active');
   if(panelId==='tab-orders')loadOrders();
   if(panelId==='tab-flower')renderPMGrid('flower','pm-flower');
+  if(panelId==='tab-prerolls')renderPMGrid('preroll','pm-prerolls');
   if(panelId==='tab-edibles')renderPMGrid('edible','pm-edibles');
   if(panelId==='tab-vapes')renderPMGrid('vape','pm-vapes');
   if(panelId==='tab-wraps')renderPMGrid('wrap','pm-wraps');
