@@ -1122,15 +1122,7 @@ button{cursor:pointer;}a{text-decoration:none;}
       <img class="iu-preview" id="coa-preview" src="" alt="">
       <div id="coa-placeholder"><div class="iu-icon">📄</div><div class="iu-text">Upload COA — Image or PDF</div></div>
     </div>
-    <div class="f2" style="margin-bottom:12px">
-      <div class="fg" style="margin-bottom:0"><label class="fl">Strain / Product Name *</label><input class="fi" id="coa-strain" placeholder="e.g. Runtz"></div>
-      <div class="fg" style="margin-bottom:0"><label class="fl">Batch # *</label><input class="fi" id="coa-batch" placeholder="e.g. PSA-2025-001"></div>
-    </div>
-    <div class="f2" style="margin-bottom:12px">
-      <div class="fg" style="margin-bottom:0"><label class="fl">Test Date</label><input class="fi" id="coa-date" type="date"></div>
-      <div class="fg" style="margin-bottom:0"><label class="fl">Lab Name</label><input class="fi" id="coa-lab" placeholder="e.g. ACS Laboratory"></div>
-    </div>
-    <div class="fg"><label class="fl">Notes (optional)</label><textarea class="fi" id="coa-notes" placeholder="THC %, CBD %, batch notes..." rows="2" style="resize:vertical;line-height:1.6"></textarea></div>
+    <div class="fg" style="margin-bottom:12px"><label class="fl">Strain / Product Name *</label><input class="fi" id="coa-strain" placeholder="e.g. Runtz"></div>
 
     <!-- QR + URL display once saved -->
     <div id="coa-share" style="display:none;background:rgba(45,122,58,.06);border:1px solid rgba(45,122,58,.25);border-radius:var(--r);padding:14px;margin:14px 0;text-align:center;">
@@ -1755,12 +1747,12 @@ function renderCoasAdmin(){
     const preview=isPdf
       ? `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--muted);font-family:'Oswald';letter-spacing:.1em;text-transform:uppercase;font-size:.7rem"><span style="font-size:2.4rem">📄</span><span style="margin-top:4px">PDF</span></div>`
       : (co.file_url ? `<img src="${co.file_url}" alt="${co.strain}">` : `<span style="font-size:2.2rem">📄</span>`);
-    const date=co.test_date?new Date(co.test_date).toLocaleDateString():'';
+    const added=new Date(co.created_at).toLocaleDateString();
     return`<div class="pm-card">
       <div class="pm-img">${preview}</div>
       <div class="pm-body">
         <div class="pm-name">${co.strain||'Untitled'}</div>
-        <div class="pm-meta">Batch ${co.batch||'—'}${date?' · '+date:''}${co.lab?' · '+co.lab:''}</div>
+        <div class="pm-meta">Added ${added}</div>
         <div class="pm-actions">
           <button class="tbtn view" onclick="openCoaEditor('${co.id}')">✏️ Edit</button>
           <button class="tbtn disp" onclick="window.open('${coaPublicUrl(co.slug)}','_blank')">🔗 View</button>
@@ -1778,12 +1770,10 @@ function renderCoaLibrary(){
     const preview=isPdf
       ? `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--gold);font-family:'Oswald';letter-spacing:.1em;text-transform:uppercase;font-size:.7rem"><span style="font-size:2.4rem">📄</span><span style="margin-top:4px">PDF</span></div>`
       : (co.file_url ? `<img src="${co.file_url}" alt="${co.strain}">` : `<span style="font-size:2.4rem">📄</span>`);
-    const date=co.test_date?new Date(co.test_date).toLocaleDateString():'';
     return`<div class="pm-card" style="cursor:pointer" onclick="viewCoa('${co.slug}')">
       <div class="pm-img">${preview}</div>
       <div class="pm-body">
         <div class="pm-name">${co.strain||'Untitled'}</div>
-        <div class="pm-meta">Batch ${co.batch||'—'}${date?' · '+date:''}</div>
         <div style="font-size:.68rem;color:var(--green2);font-family:'Oswald';letter-spacing:.1em;text-transform:uppercase;margin-top:6px">View Results →</div>
       </div>
     </div>`;
@@ -1826,13 +1816,8 @@ async function viewCoa(slug){
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">
         <span style="font-family:'Oswald';font-weight:700;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;background:rgba(45,122,58,.15);color:#6ddd8a;border:1px solid rgba(45,122,58,.3);padding:3px 10px;border-radius:4px">✓ Verified Lab Result</span>
       </div>
-      <h1 style="font-family:'Oswald';font-weight:700;font-size:clamp(1.5rem,4vw,2rem);letter-spacing:.04em;text-transform:uppercase;margin-bottom:10px;line-height:1.1">${co.strain||'COA'}</h1>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;font-size:.85rem">
-        <div><span style="color:var(--muted);font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;font-family:'Oswald'">Batch</span><br><span style="color:var(--gold);font-family:'Oswald';font-weight:600">${co.batch||'—'}</span></div>
-        <div><span style="color:var(--muted);font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;font-family:'Oswald'">Test Date</span><br><span>${date}</span></div>
-        ${co.lab?`<div style="grid-column:1/-1"><span style="color:var(--muted);font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;font-family:'Oswald'">Lab</span><br>${co.lab}</div>`:''}
-      </div>
-      ${co.notes?`<p style="font-size:.84rem;color:var(--muted);line-height:1.6;padding:10px 0;border-top:1px solid var(--border);margin-top:6px">${co.notes}</p>`:''}
+      <h1 style="font-family:'Oswald';font-weight:700;font-size:clamp(1.5rem,4vw,2rem);letter-spacing:.04em;text-transform:uppercase;margin-bottom:6px;line-height:1.1">${co.strain||'COA'}</h1>
+      <p style="font-size:.78rem;color:var(--muted)">Certificate of Analysis · Pressure SA</p>
     </div>
     ${fileBlock}`;
 }
@@ -1842,19 +1827,16 @@ function openCoaEditor(id){
   const isNew=!id;
   document.getElementById('coa-title').textContent=isNew?'Add COA':'Edit COA';
   document.getElementById('coa-del-btn').style.display=isNew?'none':'block';
-  ['coa-strain','coa-batch','coa-date','coa-lab','coa-notes'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});
+  document.getElementById('coa-strain').value='';
   document.getElementById('coa-existing-url').value='';
   document.getElementById('coa-preview').src='';
   document.getElementById('coa-preview').style.display='none';
+  document.getElementById('coa-placeholder').innerHTML='<div class="iu-icon">📄</div><div class="iu-text">Upload COA — Image or PDF</div>';
   document.getElementById('coa-placeholder').style.display='block';
   document.getElementById('coa-share').style.display='none';
   if(!isNew){
     const co=ALL_COAS.find(c=>c.id===id);if(!co){return;}
     document.getElementById('coa-strain').value=co.strain||'';
-    document.getElementById('coa-batch').value=co.batch||'';
-    document.getElementById('coa-date').value=co.test_date||'';
-    document.getElementById('coa-lab').value=co.lab||'';
-    document.getElementById('coa-notes').value=co.notes||'';
     document.getElementById('coa-existing-url').value=co.file_url||'';
     if(co.file_url && !co.file_url.toLowerCase().endsWith('.pdf')){
       document.getElementById('coa-preview').src=co.file_url;
@@ -1862,9 +1844,7 @@ function openCoaEditor(id){
       document.getElementById('coa-placeholder').style.display='none';
     }else if(co.file_url){
       document.getElementById('coa-placeholder').innerHTML='<div class="iu-icon">📄</div><div class="iu-text">PDF Uploaded — Click to Replace</div>';
-      document.getElementById('coa-placeholder').style.display='block';
     }
-    // Show share block for existing COAs
     coaCurrentSlug=co.slug;
     showCoaShare(co.slug);
   }
@@ -1899,10 +1879,11 @@ function generateSlug(strain,batch){
 
 async function saveCoa(){
   const strain=document.getElementById('coa-strain').value.trim();
-  const batch=document.getElementById('coa-batch').value.trim();
-  if(!strain||!batch){showToast('Strain and batch are required.','err');return;}
+  if(!strain){showToast('Strain name is required.','err');return;}
+  const existingUrl=document.getElementById('coa-existing-url').value;
+  if(!coaPendingFile && !existingUrl){showToast('Please upload a COA file.','err');return;}
   showSaving('Saving COA...');
-  let file_url=document.getElementById('coa-existing-url').value||null;
+  let file_url=existingUrl||null;
   if(coaPendingFile){
     const ext=coaPendingFile.name.split('.').pop();
     const path=`coas/${Date.now()}.${ext}`;
@@ -1911,19 +1892,17 @@ async function saveCoa(){
     const{data:urlData}=sb.storage.from('product-images').getPublicUrl(path);
     file_url=urlData.publicUrl;
   }
-  const payload={
-    strain,batch,
-    test_date:document.getElementById('coa-date').value||null,
-    lab:document.getElementById('coa-lab').value.trim()||null,
-    notes:document.getElementById('coa-notes').value.trim()||null,
-    file_url
-  };
+  // Auto-generate batch number from current date/time so it's unique
+  const autoBatch='PSA-'+new Date().toISOString().slice(0,10).replace(/-/g,'')+'-'+Math.random().toString(36).slice(2,5).toUpperCase();
+  const payload={strain,file_url};
   let result,error,slug;
   if(coaEditId){
     ({data:result,error}=await sb.from('coas').update(payload).eq('id',coaEditId).select().single());
     slug=result?.slug;
   }else{
-    payload.slug=generateSlug(strain,batch);
+    payload.batch=autoBatch;
+    payload.test_date=new Date().toISOString().slice(0,10);
+    payload.slug=generateSlug(strain,autoBatch);
     ({data:result,error}=await sb.from('coas').insert(payload).select().single());
     slug=payload.slug;
     if(result)coaEditId=result.id;
