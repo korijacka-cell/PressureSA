@@ -622,6 +622,7 @@ button{cursor:pointer;}a{text-decoration:none;}
       <div class="fc">
         <h4>Info</h4>
         <a>About</a>
+        <a onclick="goPage('page-coa-library')">Lab Results</a>
         <a href="tel:+17262618038">Contact</a>
       </div>
     </div>
@@ -798,6 +799,43 @@ button{cursor:pointer;}a{text-decoration:none;}
   </div>
 </div>
 
+<!-- ════ COA VIEWER (public) ════ -->
+<div id="page-coa-view" class="page">
+  <div class="topbar"><a href="tel:+17262618038">📞 +1 (726) 261-8038</a><div class="topbar-right">Lab Results · Personal Use Only</div></div>
+  <nav class="navbar">
+    <button class="hamburger" onclick="goPage('page-store')" style="font-size:1.2rem;color:var(--white)">←</button>
+    <a class="nav-logo" onclick="goPage('page-store')"><span class="nav-logo-text">Pressure SA</span></a>
+    <div></div>
+  </nav>
+  <div class="pdp-wrap" id="coa-viewer-content"></div>
+  <footer class="footer">
+    <div class="age-disclaimer"><p><strong>Pressure SA</strong> · Personal Use Only · 21+ · Texas</p></div>
+    <div class="footer-bottom"><span>© 2025 Pressure SA</span></div>
+  </footer>
+</div>
+
+<!-- ════ COA LIBRARY (public) ════ -->
+<div id="page-coa-library" class="page">
+  <div class="topbar"><a href="tel:+17262618038">📞 +1 (726) 261-8038</a><div class="topbar-right">Lab Results Library</div></div>
+  <nav class="navbar">
+    <button class="hamburger" onclick="goPage('page-store')" style="font-size:1.2rem;color:var(--white)">←</button>
+    <a class="nav-logo" onclick="goPage('page-store')"><span class="nav-logo-text">Pressure SA</span></a>
+    <div></div>
+  </nav>
+  <div class="hero" style="padding:28px 20px 24px">
+    <div class="hero-script" style="font-size:clamp(2rem,7vw,3.5rem)">Lab Results</div>
+    <div class="hero-sub">Certificates of Analysis · Verified Quality</div>
+  </div>
+  <div class="section">
+    <div class="sec-head">All Lab Results</div>
+    <div class="pm-grid" id="coa-library-grid"><div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted);font-family:'Oswald';letter-spacing:.1em;text-transform:uppercase">Loading...</div></div>
+  </div>
+  <footer class="footer">
+    <div class="age-disclaimer"><p><strong>Pressure SA</strong> · Personal Use Only · 21+ · Texas</p></div>
+    <div class="footer-bottom"><span>© 2025 Pressure SA</span></div>
+  </footer>
+</div>
+
 <!-- ════ ADMIN LOGIN ════ -->
 <div id="page-admin-login" class="page">
   <div class="al-wrap">
@@ -833,6 +871,7 @@ button{cursor:pointer;}a{text-decoration:none;}
       <button class="adm-tab" onclick="switchTab('tab-wraps',this)">🍂 Wraps</button>
       <button class="adm-tab" onclick="switchTab('tab-concentrates',this)">🪨 Concentrates</button>
       <button class="adm-tab" onclick="switchTab('tab-merch-admin',this)">👕 Merch</button>
+      <button class="adm-tab" onclick="switchTab('tab-coas',this)">📄 COAs</button>
       <button class="adm-tab" onclick="switchTab('tab-settings',this)">⚙️ Settings</button>
     </div>
     <div class="adm-body">
@@ -917,6 +956,18 @@ button{cursor:pointer;}a{text-decoration:none;}
           <button class="btn-g" onclick="openEditor(null,'merch')" style="font-size:.75rem;padding:8px 16px">+ Add Merch</button>
         </div>
         <div class="pm-grid" id="pm-merch"></div>
+      </div>
+
+      <!-- COAs -->
+      <div class="adm-panel" id="tab-coas">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+          <div class="adm-sec" style="margin-bottom:0">Certificates of Analysis</div>
+          <button class="btn-g" onclick="openCoaEditor(null)" style="font-size:.75rem;padding:8px 16px">+ Add COA</button>
+        </div>
+        <p style="font-size:.78rem;color:var(--muted);margin-bottom:18px;line-height:1.6;max-width:600px;">
+          Upload lab results so customers can verify product safety. Each COA gets its own URL and QR code — print the QR on package labels so customers can scan to view the lab results.
+        </p>
+        <div class="pm-grid" id="pm-coas"></div>
       </div>
 
       <!-- SETTINGS -->
@@ -1057,6 +1108,48 @@ button{cursor:pointer;}a{text-decoration:none;}
   </div>
 </div>
 
+<!-- COA EDITOR MODAL -->
+<div class="pe-overlay" id="coa-overlay">
+  <div class="pe-card">
+    <div class="pe-head">
+      <div class="pe-title" id="coa-title">Add COA</div>
+      <button class="cd-close" onclick="closeCoaEditor()">Close ✕</button>
+    </div>
+    <input type="hidden" id="coa-id">
+    <input type="hidden" id="coa-existing-url">
+    <div class="img-upload">
+      <input type="file" id="coa-file" accept="image/*,application/pdf" onchange="handleCoaUpload(event)">
+      <img class="iu-preview" id="coa-preview" src="" alt="">
+      <div id="coa-placeholder"><div class="iu-icon">📄</div><div class="iu-text">Upload COA — Image or PDF</div></div>
+    </div>
+    <div class="f2" style="margin-bottom:12px">
+      <div class="fg" style="margin-bottom:0"><label class="fl">Strain / Product Name *</label><input class="fi" id="coa-strain" placeholder="e.g. Runtz"></div>
+      <div class="fg" style="margin-bottom:0"><label class="fl">Batch # *</label><input class="fi" id="coa-batch" placeholder="e.g. PSA-2025-001"></div>
+    </div>
+    <div class="f2" style="margin-bottom:12px">
+      <div class="fg" style="margin-bottom:0"><label class="fl">Test Date</label><input class="fi" id="coa-date" type="date"></div>
+      <div class="fg" style="margin-bottom:0"><label class="fl">Lab Name</label><input class="fi" id="coa-lab" placeholder="e.g. ACS Laboratory"></div>
+    </div>
+    <div class="fg"><label class="fl">Notes (optional)</label><textarea class="fi" id="coa-notes" placeholder="THC %, CBD %, batch notes..." rows="2" style="resize:vertical;line-height:1.6"></textarea></div>
+
+    <!-- QR + URL display once saved -->
+    <div id="coa-share" style="display:none;background:rgba(45,122,58,.06);border:1px solid rgba(45,122,58,.25);border-radius:var(--r);padding:14px;margin:14px 0;text-align:center;">
+      <p style="font-family:'Oswald';font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:#6ddd8a;margin-bottom:10px">✅ Saved — Share This COA</p>
+      <div id="coa-qr-display" style="background:#fff;padding:8px;border-radius:6px;display:inline-block;margin-bottom:10px;"></div>
+      <div style="font-family:'Oswald';font-size:.75rem;letter-spacing:.04em;color:var(--white);margin-bottom:6px;word-break:break-all" id="coa-share-url"></div>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+        <button class="tbtn view" onclick="copyCoaUrl()">📋 Copy URL</button>
+        <button class="tbtn view" onclick="downloadCoaQr()">⬇ Download QR</button>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:14px">
+      <button class="place-btn" onclick="saveCoa()" style="flex:2">Save COA</button>
+      <button class="tbtn del" onclick="deleteCoa()" style="flex:1;padding:12px" id="coa-del-btn">Delete</button>
+    </div>
+  </div>
+</div>
+
 <!-- ORDER DETAIL MODAL -->
 <div class="modal-bg" id="omodal" onclick="if(event.target===this)closeModal()">
   <div class="modal-card" id="omc"></div>
@@ -1109,9 +1202,27 @@ async function initApp(){
   try{
     const {data:{session}}=await sb.auth.getSession();
     currentUser=session?.user||null;
-    await Promise.all([loadAllProducts(),loadSettings()]);
+    await Promise.all([loadAllProducts(),loadSettings(),loadCoas()]);
     renderAllCategories();
     document.getElementById('app-loader').style.display='none';
+
+    // URL routing: ?coa=slug → public COA viewer, ?page=coas → library
+    const params=new URLSearchParams(window.location.search);
+    const coaSlug=params.get('coa');
+    const pageParam=params.get('page');
+    if(coaSlug){
+      // Skip age gate for COA viewer — it's a verification page, not a sales page
+      viewCoa(coaSlug);
+      renderCart();
+      return;
+    }
+    if(pageParam==='coas'){
+      goPage('page-coa-library');
+      renderCoaLibrary();
+      renderCart();
+      return;
+    }
+
     if(!sessionStorage.getItem('age-verified'))document.getElementById('age-gate').classList.add('show');
     renderCart();
   }catch(e){
@@ -1606,12 +1717,258 @@ function buildOrderRows(orders){
 
 async function deleteOrder(id,orderNum){
   if(!confirm(`Delete order ${orderNum}? This cannot be undone.`))return;
-  const{error}=await sb.from('orders').delete().eq('id',id);
-  if(error){showToast('Delete failed','err');return;}
+  const{data,error,count}=await sb.from('orders').delete({count:'exact'}).eq('id',id).select();
+  if(error){
+    console.error('Delete error:',error);
+    showToast('Delete failed: '+(error.message||error.code||'unknown'),'err');
+    return;
+  }
+  if(!data||data.length===0){
+    showToast('Delete blocked — RLS policy missing in Supabase','err');
+    console.warn('Delete returned no rows — likely RLS denying the operation');
+    return;
+  }
   allOrders=allOrders.filter(o=>o.id!==id);
   renderAdminStats(allOrders);
   renderWeeklyOrders();
   showToast(`Order ${orderNum} deleted`);
+}
+
+/* ══ COA MANAGEMENT ══ */
+let ALL_COAS=[], coaEditId=null, coaPendingFile=null, coaCurrentSlug=null;
+
+async function loadCoas(){
+  const{data,error}=await sb.from('coas').select('*').order('created_at',{ascending:false});
+  if(error){console.error('COAs load error:',error);return;}
+  ALL_COAS=data||[];
+}
+
+function coaPublicUrl(slug){
+  return `${window.location.origin}${window.location.pathname}?coa=${slug}`;
+}
+
+function renderCoasAdmin(){
+  const g=document.getElementById('pm-coas');if(!g)return;
+  if(!ALL_COAS.length){g.innerHTML=`<div style="color:var(--muted);font-family:'Oswald';letter-spacing:.1em;text-transform:uppercase;padding:16px;grid-column:1/-1">No COAs uploaded yet.</div>`;return;}
+  g.innerHTML=ALL_COAS.map(co=>{
+    const isPdf=co.file_url&&co.file_url.toLowerCase().endsWith('.pdf');
+    const preview=isPdf
+      ? `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--muted);font-family:'Oswald';letter-spacing:.1em;text-transform:uppercase;font-size:.7rem"><span style="font-size:2.4rem">📄</span><span style="margin-top:4px">PDF</span></div>`
+      : (co.file_url ? `<img src="${co.file_url}" alt="${co.strain}">` : `<span style="font-size:2.2rem">📄</span>`);
+    const date=co.test_date?new Date(co.test_date).toLocaleDateString():'';
+    return`<div class="pm-card">
+      <div class="pm-img">${preview}</div>
+      <div class="pm-body">
+        <div class="pm-name">${co.strain||'Untitled'}</div>
+        <div class="pm-meta">Batch ${co.batch||'—'}${date?' · '+date:''}${co.lab?' · '+co.lab:''}</div>
+        <div class="pm-actions">
+          <button class="tbtn view" onclick="openCoaEditor('${co.id}')">✏️ Edit</button>
+          <button class="tbtn disp" onclick="window.open('${coaPublicUrl(co.slug)}','_blank')">🔗 View</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderCoaLibrary(){
+  const g=document.getElementById('coa-library-grid');if(!g)return;
+  if(!ALL_COAS.length){g.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted);font-family:'Oswald';letter-spacing:.1em;text-transform:uppercase">No lab results posted yet</div>`;return;}
+  g.innerHTML=ALL_COAS.map(co=>{
+    const isPdf=co.file_url&&co.file_url.toLowerCase().endsWith('.pdf');
+    const preview=isPdf
+      ? `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--gold);font-family:'Oswald';letter-spacing:.1em;text-transform:uppercase;font-size:.7rem"><span style="font-size:2.4rem">📄</span><span style="margin-top:4px">PDF</span></div>`
+      : (co.file_url ? `<img src="${co.file_url}" alt="${co.strain}">` : `<span style="font-size:2.4rem">📄</span>`);
+    const date=co.test_date?new Date(co.test_date).toLocaleDateString():'';
+    return`<div class="pm-card" style="cursor:pointer" onclick="viewCoa('${co.slug}')">
+      <div class="pm-img">${preview}</div>
+      <div class="pm-body">
+        <div class="pm-name">${co.strain||'Untitled'}</div>
+        <div class="pm-meta">Batch ${co.batch||'—'}${date?' · '+date:''}</div>
+        <div style="font-size:.68rem;color:var(--green2);font-family:'Oswald';letter-spacing:.1em;text-transform:uppercase;margin-top:6px">View Results →</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function viewCoa(slug){
+  // Show loading state, then fetch and render
+  const cont=document.getElementById('coa-viewer-content');
+  cont.innerHTML=`<div style="text-align:center;padding:60px;color:var(--muted);font-family:'Oswald';letter-spacing:.1em;text-transform:uppercase"><div class="spin" style="margin:0 auto 14px"></div>Loading lab results...</div>`;
+  goPage('page-coa-view');
+  // Try local cache first
+  let co=ALL_COAS.find(c=>c.slug===slug);
+  if(!co){
+    const{data}=await sb.from('coas').select('*').eq('slug',slug).single();
+    co=data;
+  }
+  if(!co){
+    cont.innerHTML=`<div style="text-align:center;padding:60px;color:var(--muted);font-family:'Oswald';letter-spacing:.1em;text-transform:uppercase">
+      <div style="font-size:3rem;margin-bottom:14px">❓</div>
+      <p style="font-size:1rem;margin-bottom:8px">COA Not Found</p>
+      <p style="font-size:.78rem;color:var(--faint);text-transform:none;letter-spacing:0;margin-top:14px">This lab result may have been removed. Please contact us if you have questions.</p>
+      <button class="btn-g" onclick="goPage('page-store')" style="margin-top:18px">← Back to Store</button>
+    </div>`;
+    return;
+  }
+  const isPdf=co.file_url&&co.file_url.toLowerCase().endsWith('.pdf');
+  const date=co.test_date?new Date(co.test_date).toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}):'—';
+  const fileBlock=isPdf
+    ? `<iframe src="${co.file_url}" style="width:100%;height:80vh;border:1px solid var(--border);border-radius:var(--r);background:#fff"></iframe>
+       <div style="text-align:center;margin-top:14px"><a href="${co.file_url}" target="_blank" class="btn-gd" style="text-decoration:none;display:inline-block">📥 Download PDF</a></div>`
+    : co.file_url
+      ? `<a href="${co.file_url}" target="_blank"><img src="${co.file_url}" alt="${co.strain} COA" style="width:100%;border:1px solid var(--border);border-radius:var(--r);display:block"></a>
+         <p style="text-align:center;font-size:.72rem;color:var(--muted);margin-top:8px">Tap image to view full size</p>`
+      : '<p style="text-align:center;color:var(--muted)">No file uploaded</p>';
+
+  cont.innerHTML=`
+    <div class="pdp-back" onclick="goPage('page-coa-library')">← All Lab Results</div>
+    <div style="background:var(--card);border:1px solid var(--border);border-top:3px solid var(--green);border-radius:var(--r);padding:24px;margin-bottom:20px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">
+        <span style="font-family:'Oswald';font-weight:700;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;background:rgba(45,122,58,.15);color:#6ddd8a;border:1px solid rgba(45,122,58,.3);padding:3px 10px;border-radius:4px">✓ Verified Lab Result</span>
+      </div>
+      <h1 style="font-family:'Oswald';font-weight:700;font-size:clamp(1.5rem,4vw,2rem);letter-spacing:.04em;text-transform:uppercase;margin-bottom:10px;line-height:1.1">${co.strain||'COA'}</h1>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;font-size:.85rem">
+        <div><span style="color:var(--muted);font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;font-family:'Oswald'">Batch</span><br><span style="color:var(--gold);font-family:'Oswald';font-weight:600">${co.batch||'—'}</span></div>
+        <div><span style="color:var(--muted);font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;font-family:'Oswald'">Test Date</span><br><span>${date}</span></div>
+        ${co.lab?`<div style="grid-column:1/-1"><span style="color:var(--muted);font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;font-family:'Oswald'">Lab</span><br>${co.lab}</div>`:''}
+      </div>
+      ${co.notes?`<p style="font-size:.84rem;color:var(--muted);line-height:1.6;padding:10px 0;border-top:1px solid var(--border);margin-top:6px">${co.notes}</p>`:''}
+    </div>
+    ${fileBlock}`;
+}
+
+function openCoaEditor(id){
+  coaEditId=id; coaPendingFile=null;
+  const isNew=!id;
+  document.getElementById('coa-title').textContent=isNew?'Add COA':'Edit COA';
+  document.getElementById('coa-del-btn').style.display=isNew?'none':'block';
+  ['coa-strain','coa-batch','coa-date','coa-lab','coa-notes'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});
+  document.getElementById('coa-existing-url').value='';
+  document.getElementById('coa-preview').src='';
+  document.getElementById('coa-preview').style.display='none';
+  document.getElementById('coa-placeholder').style.display='block';
+  document.getElementById('coa-share').style.display='none';
+  if(!isNew){
+    const co=ALL_COAS.find(c=>c.id===id);if(!co){return;}
+    document.getElementById('coa-strain').value=co.strain||'';
+    document.getElementById('coa-batch').value=co.batch||'';
+    document.getElementById('coa-date').value=co.test_date||'';
+    document.getElementById('coa-lab').value=co.lab||'';
+    document.getElementById('coa-notes').value=co.notes||'';
+    document.getElementById('coa-existing-url').value=co.file_url||'';
+    if(co.file_url && !co.file_url.toLowerCase().endsWith('.pdf')){
+      document.getElementById('coa-preview').src=co.file_url;
+      document.getElementById('coa-preview').style.display='block';
+      document.getElementById('coa-placeholder').style.display='none';
+    }else if(co.file_url){
+      document.getElementById('coa-placeholder').innerHTML='<div class="iu-icon">📄</div><div class="iu-text">PDF Uploaded — Click to Replace</div>';
+      document.getElementById('coa-placeholder').style.display='block';
+    }
+    // Show share block for existing COAs
+    coaCurrentSlug=co.slug;
+    showCoaShare(co.slug);
+  }
+  document.getElementById('coa-overlay').classList.add('open');
+}
+
+function closeCoaEditor(){document.getElementById('coa-overlay').classList.remove('open');coaPendingFile=null;}
+
+function handleCoaUpload(e){
+  const file=e.target.files[0];if(!file)return;
+  coaPendingFile=file;
+  const isPdf=file.type==='application/pdf';
+  if(isPdf){
+    document.getElementById('coa-preview').style.display='none';
+    document.getElementById('coa-placeholder').innerHTML='<div class="iu-icon">📄</div><div class="iu-text">'+file.name+'</div>';
+    document.getElementById('coa-placeholder').style.display='block';
+  }else{
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      document.getElementById('coa-preview').src=ev.target.result;
+      document.getElementById('coa-preview').style.display='block';
+      document.getElementById('coa-placeholder').style.display='none';
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+function generateSlug(strain,batch){
+  const base=(strain+'-'+batch).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);
+  return base+'-'+Math.random().toString(36).slice(2,7);
+}
+
+async function saveCoa(){
+  const strain=document.getElementById('coa-strain').value.trim();
+  const batch=document.getElementById('coa-batch').value.trim();
+  if(!strain||!batch){showToast('Strain and batch are required.','err');return;}
+  showSaving('Saving COA...');
+  let file_url=document.getElementById('coa-existing-url').value||null;
+  if(coaPendingFile){
+    const ext=coaPendingFile.name.split('.').pop();
+    const path=`coas/${Date.now()}.${ext}`;
+    const{error:upErr}=await sb.storage.from('product-images').upload(path,coaPendingFile,{upsert:true,contentType:coaPendingFile.type});
+    if(upErr){hideSaving();showToast('Upload failed: '+upErr.message,'err');return;}
+    const{data:urlData}=sb.storage.from('product-images').getPublicUrl(path);
+    file_url=urlData.publicUrl;
+  }
+  const payload={
+    strain,batch,
+    test_date:document.getElementById('coa-date').value||null,
+    lab:document.getElementById('coa-lab').value.trim()||null,
+    notes:document.getElementById('coa-notes').value.trim()||null,
+    file_url
+  };
+  let result,error,slug;
+  if(coaEditId){
+    ({data:result,error}=await sb.from('coas').update(payload).eq('id',coaEditId).select().single());
+    slug=result?.slug;
+  }else{
+    payload.slug=generateSlug(strain,batch);
+    ({data:result,error}=await sb.from('coas').insert(payload).select().single());
+    slug=payload.slug;
+    if(result)coaEditId=result.id;
+  }
+  hideSaving();
+  if(error){showToast('Save failed: '+error.message,'err');return;}
+  await loadCoas();renderCoasAdmin();
+  coaCurrentSlug=slug;
+  showCoaShare(slug);
+  showToast('COA saved!','gold');
+}
+
+function showCoaShare(slug){
+  const url=coaPublicUrl(slug);
+  document.getElementById('coa-share-url').textContent=url;
+  document.getElementById('coa-share').style.display='block';
+  const qrEl=document.getElementById('coa-qr-display');
+  qrEl.innerHTML='';
+  try{
+    new QRCode(qrEl,{text:url,width:140,height:140,colorDark:'#000',colorLight:'#fff',correctLevel:QRCode.CorrectLevel.H});
+  }catch(e){}
+}
+
+function copyCoaUrl(){
+  const url=document.getElementById('coa-share-url').textContent;
+  navigator.clipboard.writeText(url).then(()=>showToast('URL copied!','gold'),()=>showToast('Copy failed','err'));
+}
+
+function downloadCoaQr(){
+  const qrImg=document.querySelector('#coa-qr-display img');
+  if(!qrImg)return;
+  const a=document.createElement('a');
+  a.href=qrImg.src;
+  a.download=`coa-qr-${coaCurrentSlug||'pressure-sa'}.png`;
+  document.body.appendChild(a);a.click();a.remove();
+}
+
+async function deleteCoa(){
+  if(!coaEditId||!confirm('Delete this COA? The QR code will stop working.'))return;
+  showSaving('Deleting...');
+  const{error}=await sb.from('coas').delete().eq('id',coaEditId);
+  hideSaving();
+  if(error){showToast('Delete failed','err');return;}
+  await loadCoas();renderCoasAdmin();closeCoaEditor();
+  showToast('COA deleted');
 }
 
 async function updateStatus(id,status){
@@ -2040,6 +2397,7 @@ function switchTab(panelId,btn){
   if(panelId==='tab-wraps')renderPMGrid('wrap','pm-wraps');
   if(panelId==='tab-concentrates')renderPMGrid('concentrate','pm-concentrates');
   if(panelId==='tab-merch-admin')renderPMGrid('merch','pm-merch');
+  if(panelId==='tab-coas'){loadCoas().then(()=>renderCoasAdmin());}
   if(panelId==='tab-settings')loadSettingsIntoForm();
 }
 
@@ -2056,6 +2414,7 @@ function goPage(id){
   window.scrollTo(0,0);
   ['hamBtn','mobileMenu'].forEach(i=>{const el=document.getElementById(i);if(el)el.classList.remove('open');});
   if(id==='page-merch')renderMerch();
+  if(id==='page-coa-library'){loadCoas().then(()=>renderCoaLibrary());}
   if(id==='page-admin'){renderAllPMGrids();loadOrders();}
 }
 function goBack(){goPage(prevPage||'page-store');}
