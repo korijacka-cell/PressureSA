@@ -407,6 +407,21 @@ button{cursor:pointer;}a{text-decoration:none;}
 .dk{color:var(--muted);}
 .dv{color:var(--white);text-align:right;max-width:60%;font-weight:500;}
 
+/* ── COLLAPSIBLE CATEGORY SECTIONS ── */
+.cat-section{padding:0 16px;margin-bottom:10px;}
+@media(min-width:769px){.cat-section{padding:0 32px;}}
+.cat-section-header{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px 20px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:all .2s;user-select:none;}
+.cat-section-header:hover{border-color:var(--green);background:#222;}
+.cat-section-header.open{border-color:var(--green);border-bottom-left-radius:0;border-bottom-right-radius:0;border-bottom-color:transparent;}
+.cat-section-title{font-family:'Oswald',sans-serif;font-weight:700;font-size:1rem;letter-spacing:.1em;text-transform:uppercase;color:var(--white);display:flex;align-items:center;gap:10px;}
+.cat-section-title .ce{font-size:1.4rem;}
+.cat-section-count{font-family:'Oswald',sans-serif;font-size:.7rem;font-weight:500;color:var(--muted);margin-left:6px;letter-spacing:0;text-transform:none;}
+.cat-chevron{color:var(--muted);font-size:.85rem;transition:transform .25s;}
+.cat-section-header.open .cat-chevron{transform:rotate(180deg);color:var(--green2);}
+.cat-section-body{display:none;background:var(--card);border:1px solid var(--green);border-top:none;border-radius:0 0 var(--r) var(--r);padding:16px;}
+.cat-section-body.open{display:block;}
+.cat-section-body .filter-bar{margin-bottom:14px;}
+
 /* ── WEEKLY ORDER FOLDERS ── */
 .week-folder{background:var(--card);border:1px solid var(--border);border-radius:var(--r);margin-bottom:12px;overflow:hidden;}
 .week-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;cursor:pointer;user-select:none;transition:background .18s;}
@@ -561,46 +576,79 @@ button{cursor:pointer;}a{text-decoration:none;}
   </div>
 
   <!-- FLOWER -->
-  <div class="section" id="shop">
-    <div class="sec-head">🌿 Premium Flower <span class="sec-sub" id="pcnt"></span></div>
-    <div class="filter-bar">
-      <button class="ftab active" onclick="filterP('all',this)">All</button>
-      <button class="ftab" onclick="filterP('indica',this)">Indica</button>
-      <button class="ftab" onclick="filterP('sativa',this)">Sativa</button>
-      <button class="ftab" onclick="filterP('hybrid',this)">Hybrid</button>
+  <!-- FLOWER -->
+  <div class="cat-section" id="shop">
+    <div class="cat-section-header" onclick="toggleCatSection(this)">
+      <div class="cat-section-title"><span class="ce">🌿</span><span>Premium Flower</span><span class="cat-section-count" id="pcnt"></span></div>
+      <span class="cat-chevron">▼</span>
     </div>
-    <div class="product-grid" id="pgrid"><div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted);font-family:'Oswald';letter-spacing:.1em;text-transform:uppercase">Loading...</div></div>
+    <div class="cat-section-body">
+      <div class="filter-bar">
+        <button class="ftab active" onclick="filterP('all',this)">All</button>
+        <button class="ftab" onclick="filterP('indica',this)">Indica</button>
+        <button class="ftab" onclick="filterP('sativa',this)">Sativa</button>
+        <button class="ftab" onclick="filterP('hybrid',this)">Hybrid</button>
+      </div>
+      <div class="product-grid" id="pgrid"><div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted);font-family:'Oswald';letter-spacing:.1em;text-transform:uppercase">Loading...</div></div>
+    </div>
   </div>
 
   <!-- PRE-ROLLS -->
-  <div class="section" id="prerolls-section">
-    <div class="sec-head">🚬 Pre-Rolls <span class="sec-sub" id="prcnt"></span></div>
-    <div class="cat-product-grid" id="prerolls-grid"><div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--muted);font-family:'Oswald';letter-spacing:.1em;text-transform:uppercase">Loading...</div></div>
+  <div class="cat-section" id="prerolls-section">
+    <div class="cat-section-header" onclick="toggleCatSection(this)">
+      <div class="cat-section-title"><span class="ce">🚬</span><span>Pre-Rolls</span><span class="cat-section-count" id="prcnt"></span></div>
+      <span class="cat-chevron">▼</span>
+    </div>
+    <div class="cat-section-body">
+      <div class="cat-product-grid" id="prerolls-grid"><div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--muted);font-family:'Oswald';letter-spacing:.1em;text-transform:uppercase">Loading...</div></div>
+    </div>
   </div>
 
   <!-- EDIBLES -->
-  <div class="section" id="edibles-section">
-    <div class="sec-head">🍬 Edibles <span class="sec-sub" id="ecnt"></span></div>
-    <div class="cat-product-grid" id="edibles-grid"><div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--muted);font-family:'Oswald';letter-spacing:.1em;text-transform:uppercase">Loading...</div></div>
+  <div class="cat-section" id="edibles-section">
+    <div class="cat-section-header" onclick="toggleCatSection(this)">
+      <div class="cat-section-title"><span class="ce">🍬</span><span>Edibles</span><span class="cat-section-count" id="ecnt"></span></div>
+      <span class="cat-chevron">▼</span>
+    </div>
+    <div class="cat-section-body">
+      <div class="cat-product-grid" id="edibles-grid"><div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--muted);font-family:'Oswald';letter-spacing:.1em;text-transform:uppercase">Loading...</div></div>
+    </div>
   </div>
 
   <!-- NICOTINE VAPES -->
-  <div class="section" id="vapes-section">
-    <div class="sec-head">💨 Nicotine Vapes <span class="sec-sub" id="vcnt"></span></div>
-    <div class="cat-product-grid" id="vapes-grid"><div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--muted);font-family:'Oswald';letter-spacing:.1em;text-transform:uppercase">Loading...</div></div>
+  <div class="cat-section" id="vapes-section">
+    <div class="cat-section-header" onclick="toggleCatSection(this)">
+      <div class="cat-section-title"><span class="ce">💨</span><span>Nicotine Vapes</span><span class="cat-section-count" id="vcnt"></span></div>
+      <span class="cat-chevron">▼</span>
+    </div>
+    <div class="cat-section-body">
+      <div class="cat-product-grid" id="vapes-grid"><div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--muted);font-family:'Oswald';letter-spacing:.1em;text-transform:uppercase">Loading...</div></div>
+    </div>
   </div>
 
   <!-- WRAPS -->
-  <div class="section" id="wraps-section">
-    <div class="sec-head">🍂 Cigarillo & Wraps <span class="sec-sub" id="wcnt"></span></div>
-    <div class="cat-product-grid" id="wraps-grid"><div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--muted);font-family:'Oswald';letter-spacing:.1em;text-transform:uppercase">Loading...</div></div>
+  <div class="cat-section" id="wraps-section">
+    <div class="cat-section-header" onclick="toggleCatSection(this)">
+      <div class="cat-section-title"><span class="ce">🍂</span><span>Cigarillo & Wraps</span><span class="cat-section-count" id="wcnt"></span></div>
+      <span class="cat-chevron">▼</span>
+    </div>
+    <div class="cat-section-body">
+      <div class="cat-product-grid" id="wraps-grid"><div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--muted);font-family:'Oswald';letter-spacing:.1em;text-transform:uppercase">Loading...</div></div>
+    </div>
   </div>
 
   <!-- CONCENTRATES -->
-  <div class="section" id="concentrates-section">
-    <div class="sec-head">🪨 Concentrates <span class="sec-sub" id="ccnt"></span></div>
-    <div class="cat-product-grid" id="concentrates-grid"><div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--muted);font-family:'Oswald';letter-spacing:.1em;text-transform:uppercase">Loading...</div></div>
+  <div class="cat-section" id="concentrates-section">
+    <div class="cat-section-header" onclick="toggleCatSection(this)">
+      <div class="cat-section-title"><span class="ce">🪨</span><span>Concentrates</span><span class="cat-section-count" id="ccnt"></span></div>
+      <span class="cat-chevron">▼</span>
+    </div>
+    <div class="cat-section-body">
+      <div class="cat-product-grid" id="concentrates-grid"><div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--muted);font-family:'Oswald';letter-spacing:.1em;text-transform:uppercase">Loading...</div></div>
+    </div>
   </div>
+
+  <div style="height:32px"></div>
 
   <footer class="footer">
     <div class="footer-grid">
@@ -2399,7 +2447,42 @@ function goPage(id){
 function goBack(){goPage(prevPage||'page-store');}
 function scrollToSection(id){
   prevPage='page-store';goPage('page-store');
-  setTimeout(()=>{const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth'});},120);
+  setTimeout(()=>{
+    const el=document.getElementById(id);
+    if(!el)return;
+    // Auto-open this dropdown if it has a header
+    const header=el.querySelector('.cat-section-header');
+    const body=el.querySelector('.cat-section-body');
+    if(header && body && !header.classList.contains('open')){
+      // Close all other open sections first
+      document.querySelectorAll('.cat-section-header.open').forEach(h=>{
+        h.classList.remove('open');
+        h.nextElementSibling.classList.remove('open');
+      });
+      header.classList.add('open');
+      body.classList.add('open');
+    }
+    // Scroll to the header so customer sees it expand
+    el.scrollIntoView({behavior:'smooth',block:'start'});
+  },140);
+}
+
+function toggleCatSection(header){
+  const body=header.nextElementSibling;
+  const isOpen=header.classList.contains('open');
+  // Close all other sections so only one is open at a time
+  document.querySelectorAll('.cat-section-header.open').forEach(h=>{
+    if(h!==header){
+      h.classList.remove('open');
+      h.nextElementSibling.classList.remove('open');
+    }
+  });
+  header.classList.toggle('open',!isOpen);
+  body.classList.toggle('open',!isOpen);
+  if(!isOpen){
+    // Smooth scroll to header after expand so user sees content
+    setTimeout(()=>header.scrollIntoView({behavior:'smooth',block:'start'}),100);
+  }
 }
 function toggleMenu(){document.getElementById('hamBtn').classList.toggle('open');document.getElementById('mobileMenu').classList.toggle('open');}
 let toastTimer;
